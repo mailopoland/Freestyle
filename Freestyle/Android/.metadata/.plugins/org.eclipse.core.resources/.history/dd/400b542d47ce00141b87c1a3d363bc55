@@ -1,0 +1,12 @@
+package freestyle.helpers.outin.downloaders;
+
+import android.content.Context;
+
+//DownloaderStandard plus message display after correct downloading
+public abstract class DownloaderStandardMsg extends DownloaderStandard{
+
+	public DownloaderStandardMsg(Context curContext, Class<?> newActivity) {
+		super(curContext, newActivity);
+	}
+
+}

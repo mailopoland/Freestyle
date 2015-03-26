@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:background="#D9000000">
+ 
+    <TextView
+        android:id="@+id/instruction_small_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white" 
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/instruction_big_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instruction_small_text"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/instruction_image"
+        android:contentDescription="@string/instr_pic_descr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instruction_big_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+      	android:layout_marginBottom="16dp"
+        android:src="@drawable/scroll_hotizontal" />
+
+
+    <Button
+        android:id="@+id/button_i_got_it"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instruction_image"
+        android:layout_centerHorizontal="true"
+	 />
+
+ 
+</RelativeLayout>

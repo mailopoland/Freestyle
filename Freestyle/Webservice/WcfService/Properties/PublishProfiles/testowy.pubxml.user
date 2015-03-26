@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>http://*:62373/</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>10/12/2014 10:16:13</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>10/12/2014 10:16:13</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
+      <publishTime>10/12/2014 10:16:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AspNet.Identity.EntityFramework.dll">
+      <publishTime>10/12/2014 10:16:16</publishTime>
+    </File>
+    <File Include="bin/WcfService.dll">
+      <publishTime>11/12/2014 12:21:30</publishTime>
+    </File>
+    <File Include="bin/WcfService.pdb">
+      <publishTime>11/12/2014 12:21:30</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>10/12/2014 10:16:20</publishTime>
+    </File>
+    <File Include="Service.svc">
+      <publishTime>10/13/2014 15:15:17</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>11/12/2014 12:21:30</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

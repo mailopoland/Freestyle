@@ -1,0 +1,42 @@
+package freestyle;
+
+import android.content.Context;
+import freestyle.data.app.LoginPass;
+
+public class TestingLoginsPreparer {
+	
+	private Context curContext; 
+	
+	public TestingLoginsPreparer(Context curContext){
+		this.curContext = curContext;
+	}
+	
+	public LoginPass getUserPrepareUser(){
+		LoginPass result = new LoginPass();
+		
+		int userNumber = SharedPref.getMainInt(SharedPref.Keys.PREPARE_USER_IT, curContext);
+		userNumber += 1 % 5;
+		switch (userNumber){
+			case 0:
+				result.login = "mailo.poland@gmail.com";
+				result.pass = "test12pass";
+				break;
+			case 1:
+				result.login = "a@a.com";
+				result.pass =  "test12passReply";
+				break;
+			case 2:
+				result.login = "b@a.com";
+				result.pass = "test12passReply2";
+				break;
+			case 3:
+				result.login = "c@a.com";
+				result.pass = "test12passReply3";
+				break;
+			case 4:
+				result.login = "d@a.com";
+				result.pass = "passnoData0000";
+			
+		}
+	}
+}

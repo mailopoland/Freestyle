@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;Freestyle&apos;&#x0D;&#x0A;- Original project: &apos;Freestyle&apos;&#x0D;&#x0A;- Original element: &apos;fragment_title_and_author_sample_with_rhymes.xml&apos;" description="Delete element" element1="res/layout/fragment_title_and_author_sample_with_rhymes.xml" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1413781315142" subPackages="false" version="1.0"/>
+</session>

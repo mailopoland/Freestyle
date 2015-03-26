@@ -1,0 +1,210 @@
+package freestyle.helpers;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import com.example.freestyle.R;
+import freestyle.activities.AppCloserActivity;
+import freestyle.activities.SettingActivity;
+import freestyle.activities.StartSplashActivity;
+import freestyle.adapters.LogAdp;
+
+public class DialogBuilder {
+	private Context context;
+	
+	public DialogBuilder(Context context){
+		this.context = context;
+	}
+	
+	public void chooseAccount(final StartSplashActivity authorizActiv){
+		UserGoogleInfoFetcher accMan = new UserGoogleInfoFetcher(context);
+		final CharSequence logins[] = accMan.getAccountsNames();
+		if(logins != null && logins.length > 0){
+			AlertDialog.Builder builder = baseDialog();
+			builder.setCancelable(false);
+			builder.setTitle(R.string.choose_account_title);
+			builder.setItems(logins, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					authorizActiv.authorize((logins[which]).toString());
+				}
+			});
+			builder.show();
+		}
+		else
+			authorizActiv.authorize(null);
+	}
+	
+	public void customError(int stringId){	
+		this.customError(context.getString(stringId));
+	}
+	
+	public void customError(String msgTxt){	
+		this.setDefaultButton(
+			this.errorDialog()
+			.setTitle( getErrorTitle(R.string.error_custom_title))
+			.setMessage(msgTxt + context.getString(R.string.error_server_connect_txt))
+		 )
+		 .show();
+	}
+	
+	public void customErrorSettings(int stringId){
+		this.customErrorSettings(context.getString(stringId));
+	}
+	
+	public void customErrorSettings(String msgTxt){
+		this.errorDialog()
+		.setTitle( R.string.error_settings_custom_title)
+		.setMessage(msgTxt)
+		.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) { 
+		        Activity sett = null;
+		    	try{
+		        	sett = (Activity)context;
+		        }
+		    	catch(Exception ex){
+		    		ex.printStackTrace();
+		    		sett = null;
+		    	}
+		    	if(sett != null){
+		    		Intent intent = new Intent(context, SettingActivity.class);
+		    		sett.startActivity(intent);
+		    		sett.finish();
+		    	}
+		    }
+		 })
+		.show();
+	}
+	
+	public void wrongClientVer(){
+		this.setCloseAppButton(
+			this.errorDialog()
+			.setTitle( getErrorTitle(R.string.error_wrong_client_ver_title))
+			.setMessage(context.getString(R.string.error_wrong_client_ver_text))
+		)
+		.show();
+	}
+	
+	public void deleteCurAccount(){
+		this.errorDialog()
+		//on purpose without getErrorTitle (because is error but more sth like special situation)
+		.setTitle( R.string.error_cur_account_is_delete_title)
+		.setMessage(context.getString(R.string.error_cur_account_is_delete_text))
+		.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) { 
+		    	Intent intent = new Intent(context, StartSplashActivity.class);
+            	context.startActivity(intent);
+		    }
+		})
+		.show();
+	}
+	
+	public void noAccount(){
+		this.setCloseAppButton(
+			DialogBuilder.this.errorDialog()
+			.setTitle(DialogBuilder.this.getErrorTitle(R.string.error_no_gmail_title))
+			.setMessage( context.getString(R.string.error_no_gmail_txt))
+		)
+		.show();
+	}
+	
+	public void problemWithLogin(){
+		this.setDefaultButton(
+				this.errorDialog()
+				.setTitle( getErrorTitle(R.string.error_server_connect_title))
+				.setMessage(R.string.error_server_connect_txt)
+			)
+			 .show();
+	}
+	
+	public void internalError(){
+		this.setDefaultButton(
+			this.errorDialog()
+			.setTitle( getErrorTitle(R.string.error_internal_try_again))
+			.setMessage(R.string.error_internal_try_again)
+		)
+		.show();
+	}
+	
+	public void validationError(int stringId){	
+		this.validationError(context.getString(stringId));
+	}
+	
+	public void validationError(String msgTxt){	
+		this.simpleDialog()
+		.setTitle( getErrorTitle(R.string.wrong_data))
+		.setMessage(msgTxt)
+		.setNeutralButton(android.R.string.ok, null)
+		.show();
+	}
+	
+	public void confirmDefault(int stringId, DialogInterface.OnClickListener yes, DialogInterface.OnClickListener no){
+		confirmCustom(context.getString(R.string.confirm_decision), context.getString(stringId), yes, no);
+	}
+	
+	
+	public void confirmCustom(String title, String msg, DialogInterface.OnClickListener yes, DialogInterface.OnClickListener no){
+		this.simpleDialog()
+		.setTitle(title)
+		.setMessage(msg)
+		.setNegativeButton(R.string.no, no)
+		.setPositiveButton(R.string.yes, yes)
+		.show();
+	}
+	
+	//use to app error
+	private AlertDialog.Builder errorDialog(){
+		AlertDialog.Builder result = simpleDialog();
+		result.setCancelable(false);
+		return result;
+	}
+	
+	//use to standard dialog
+	private AlertDialog.Builder simpleDialog(){
+		AlertDialog.Builder result = baseDialog();
+		result.setIcon(android.R.drawable.ic_dialog_alert);
+		return result;
+	}
+	
+	//use when simpleDialog is too much
+	private AlertDialog.Builder baseDialog(){
+		return new AlertDialog.Builder(DialogBuilder.this.context);
+	}
+	//return "Error: " + string from stringID
+	private String getErrorTitle(int stringId){
+		return context.getString(R.string.error_name) + context.getString(stringId);
+	}
+	
+	private Builder setDefaultButton(Builder arg){
+		return arg.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) { 
+		        System.exit(0);
+		    }
+		 });
+	}
+	
+	private Builder setCloseAppButton(Builder arg){
+		return arg.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) { 
+		    	Intent closer = new Intent(context, AppCloserActivity.class);
+		    	closer.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		    	context.startActivity(closer);
+		    	
+		    	Activity activity = null;
+		    	try{
+		    		activity = (Activity)context;
+		    	}
+		    	catch(Exception ex){
+		    		LogAdp.e(getClass(), "setCloseAppButton", "during cast Context to Activity", ex);
+		    		activity = null;
+		    	}
+            	if(activity != null)
+            		activity.finish();
+		    }
+		});
+	}
+}

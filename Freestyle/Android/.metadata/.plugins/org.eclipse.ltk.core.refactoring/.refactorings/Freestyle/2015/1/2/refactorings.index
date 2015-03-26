@@ -1,0 +1,40 @@
+1420554009817	Rename field 'userId'
+1420554063102	Rename field 'userId'
+1420554148080	Rename field 'newestByDate'
+1420554353402	Rename field 'id'
+1420704206203	Rename field 'curValue'
+1420704461490	Rename field 'curValue'
+1420705677273	Rename local variable 'date'
+1420705688791	Rename local variable 'curValue'
+1420705699310	Rename local variable 'curValue'
+1420713770616	Rename type 'GetMyComplActivity'
+1420714195606	Rename method 'getRhymeAuthorComplFinishDate'
+1420717719979	Rename type 'MyActionBarActivity'
+1420717737791	Rename type 'MyRhymesMenuActivity'
+1420718349297	Rename method 'newReply'
+1420718498686	Rename local variable 'reply'
+1420718515397	Rename local variable 'newRhyme'
+1420741963454	Rename type 'ClickListGenerator'
+1420742974553	Rename field 'extContext'
+1420800839351	Rename local variable 'userRhymeEditFr'
+1420800852914	Rename field 'userRhymeEditFr'
+1420804515822	Rename type 'ClickUserEditGenerator'
+1420804604015	Move compilation unit
+1420804671086	Delete element
+1420804699248	Rename package 'freestyle.activities2'
+1420804713384	Rename package 'freestyle.activities.rhymes.abstracts'
+1420804733890	Move compilation units
+1420804750551	Delete element
+1420805146278	Rename field 'userRhymeEditFrTag'
+1420805157638	Rename local variable 'userRhymeEditFrTag'
+1420809872831	Rename type 'ClickGenerator'
+1420809921350	Rename type 'ProgressDialogImp'
+1420809930441	Rename type 'UploadProgressDialogImp'
+1420809950031	Move compilation unit
+1420811452501	Delete element
+1420814462402	Rename field 'editorFrTag'
+1420815003560	Rename local variable 'editorFrTag'
+1420815780596	Rename type 'UserEditClickGenerator'
+1420817375356	Rename type 'AuthorChooseClickGenerator'
+1420903519472	Copy compilation unit
+1420984590673	Copy compilation unit

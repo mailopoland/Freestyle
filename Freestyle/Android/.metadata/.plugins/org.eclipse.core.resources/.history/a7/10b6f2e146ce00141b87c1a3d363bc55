@@ -1,0 +1,6 @@
+package freestyle.helpers.outin.downloaders;
+
+//DownloaderStandard plus message display after correct downloading
+public class DownloaderStandardMsg {
+
+}

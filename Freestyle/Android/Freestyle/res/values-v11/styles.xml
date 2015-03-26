@@ -1,0 +1,33 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme for API 11+. This theme completely replaces
+        AppBaseTheme from res/values/styles.xml on API 11+ devices.
+    -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat">
+		<item name="android:windowBackground">@color/black</item>
+   		<item name="android:colorBackground">@color/black</item>
+		<item name="android:textColor">@color/white</item>
+    	<item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+    
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+           parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+		<item name="android:background">@color/red</item>	
+        <!-- Support library compatibility -->
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="android:displayOptions">showHome|showTitle</item>
+		<item name="displayOptions">showHome|showTitle</item>
+		<item name="android:icon">@android:color/transparent</item> 
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+           parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">35sp</item>
+        <!-- The textColor property is backward compatible with the Support Library -->
+    </style>
+</resources>

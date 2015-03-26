@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Reply_Layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    
+	<RelativeLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+   	>
+		<ImageButton
+	        android:id="@+id/btn_left"
+	        android:contentDescription="@string/prev"
+	        android:layout_width="22dp"
+	        android:layout_height="50dp"
+	        android:background="@android:color/transparent"
+	        android:src="@drawable/arrow_left_choose_write_sentence"
+		 >
+		</ImageButton>
+		<ImageButton
+	        android:id="@+id/btn_right"
+	        android:contentDescription="@string/next"
+	        android:layout_width="22dp"
+	        android:layout_height="50dp"
+	        android:layout_alignParentRight="true"
+	        android:background="@android:color/transparent"
+	        android:src="@drawable/arrow_right_choose_write_sentence" />
+	    
+    </RelativeLayout>
+    
+    <!-- To prevent destroy layout when buttons left/right are hidden -->
+    <RelativeLayout
+       android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+    	android:layout_marginLeft="39dp"
+    	android:layout_marginRight="39dp">
+    
+    <Button
+        android:id="@+id/btn_accept"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/view_reply_choose_text"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/accept_choose_write_sentence">
+    </Button>
+
+   <Button
+        android:id="@+id/btn_decline"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignBaseline="@id/btn_accept"
+        android:layout_marginLeft="22dp"
+        android:layout_toRightOf="@id/btn_accept"
+        android:background="@null"
+        android:text="@string/decline"
+        android:textColor="@color/red_light"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/view_user_author_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_reply_choose_text"
+        android:layout_toRightOf="@id/btn_decline"
+		android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="right"
+        android:textColor="@color/red_light"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/view_user_author_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_user_author_login"
+        android:layout_toRightOf="@id/btn_decline"
+		android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="right"
+        android:textColor="@color/red_light"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/view_reply_choose_text"
+        style="Rhyme_Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="15sp"
+        android:textColor="@color/red_light"
+        android:padding="5dp"
+	 />
+	</RelativeLayout>
+</RelativeLayout>

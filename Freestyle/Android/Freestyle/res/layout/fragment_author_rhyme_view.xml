@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    style="@style/Sentence_Layout">
+	
+	   <TextView
+	        android:id="@+id/view_author_sentence_text"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/gray_light" 
+	        android:textSize="@dimen/sentence_text"
+	        android:padding="5dp"
+	        android:layout_marginRight="25dp"
+	        android:layout_marginLeft="10dp">
+	    </TextView>
+</RelativeLayout>

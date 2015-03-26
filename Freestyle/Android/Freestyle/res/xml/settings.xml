@@ -1,0 +1,61 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+          android:title="@string/pref_user_profile">
+
+        <EditTextPreference
+            android:key="@string/pref_key_user_name"
+            android:title="@string/pref_change_user_name"
+            android:dialogTitle="@string/pref_new_user_name"
+            android:singleLine="true"
+            android:maxLength="@integer/user_login_max_length"
+             />
+
+<!-- unused change for only show or hide email
+        <EditTextPreference 
+            android:key="@string/pref_key_user_email"
+            android:title="@string/pref_user_email"
+            android:dialogTitle="@string/pref_new_user_email"
+            android:singleLine="true"
+            android:maxLength="@integer/user_email_max_length"
+             />
+-->
+		<CheckBoxPreference
+		    android:title="@string/pref_show_user_email"
+            android:key="@string/pref_key_show_email"
+      	/>
+    </PreferenceCategory>
+    <PreferenceCategory
+          android:title="@string/pref_notification"
+          >
+        <Preference 
+            android:summary="@string/pref_notification_summary" 
+            android:selectable="false"/>
+    	<CheckBoxPreference
+    	    android:title="@string/pref_noti_resp"
+    	    android:summary="@string/pref_noti_resp_summary" 
+            android:key="@string/pref_key_noti_resp" />
+    	<CheckBoxPreference
+    	    android:title="@string/pref_noti_accept"
+            android:summary="@string/pref_noti_accept_summary" 
+            android:key="@string/pref_key_noti_accept" />
+	    <ListPreference
+	        android:key="@string/pref_key_noti_freq"
+			android:title="@string/pref_noti_freq"
+	        android:summary="1 godzina"
+	        android:entries="@array/noti_freq_entities"
+	        android:entryValues="@array/noti_freq_values"
+	        />
+    </PreferenceCategory>
+    <PreferenceCategory
+          android:title="@string/pref_account"
+          >
+	    <ListPreference
+	        android:key="pref_key_change_account"
+			android:title="@string/pref_change_account"
+	        android:summary="@string/pref_change_account_info"
+	        ></ListPreference>
+	</PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,191 @@
+package freestyle.helpers.json;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import freestyle.data.dto.*;
+
+public  class JsonConsumer {
+	public LogInBaseData getLoginBaseData(String input) throws Exception{
+		LogInBaseData result = new LogInBaseData();
+		
+		JSONObject specObject = new JSONObject(input);
+		//JSONObject specObject = globalObject.getJSONObject("LoginBaseData");
+	    result.id = specObject.getString("UserKey");
+	    result.login = specObject.getString("Login");
+	    result.email = specObject.optString("Email");
+             
+		return result;
+	}
+	
+	public ChooseWriteSentence getChooseWriteSentence(String input) throws Exception{
+		if(input == null || input.isEmpty()) 
+			return null;
+		
+		ChooseWriteSentence result = new ChooseWriteSentence();
+		JSONObject specObject = new JSONObject(input);
+		//not helpers for use optimalization 
+		//result = (ChooseWriteSentence)getIncompletedViewRhyme(specObject);
+        result.rhymeId = specObject.getString("RhymeId");
+        result.title = specObject.getString("Title");
+        result.toEnd = specObject.getString("ToEnd");
+        JSONArray senToShowJs = specObject.getJSONArray("SentencesToShow");
+        
+        JSONArray sugRepJs = specObject.optJSONArray("SuggestedReplies");
+        
+        
+        int senToShowJsLenght = senToShowJs.length();
+        int sugRepJsLenght = 0;
+        if(sugRepJs != null){
+        	result.suggestedReplies = new ArrayList<ReplyToAccepted>();
+        	sugRepJsLenght = sugRepJs.length();
+        }
+       
+        
+        //optimalization: sugRep and senToShow go together still they can
+        int i = 0;
+        if( sugRepJsLenght < senToShowJsLenght ){
+        	for(; i < sugRepJsLenght ; ++i){
+            	result.sentencesToShow.add(getSentenceToShow(senToShowJs.getJSONObject(i)));
+            	result.suggestedReplies.add(getReplyToAccepted(sugRepJs.getJSONObject(i)));
+            }
+        	for( ; i < senToShowJsLenght - 1; ++i){
+        		result.sentencesToShow.add(getSentenceToShow(senToShowJs.getJSONObject(i)));
+        	}
+        	result.sentencesToShow.add(getLastSentenceToShow(senToShowJs.getJSONObject(i)));
+        }
+        else
+        {
+        	for(; i < senToShowJsLenght - 1 ; ++i){
+            	result.sentencesToShow.add(getSentenceToShow(senToShowJs.getJSONObject(i)));
+            	result.suggestedReplies.add(getReplyToAccepted(sugRepJs.getJSONObject(i)));
+            }
+        	result.sentencesToShow.add(getLastSentenceToShow(senToShowJs.getJSONObject(i)));
+        	
+        	for( ; i < sugRepJsLenght; ++i){
+        		result.suggestedReplies.add(getReplyToAccepted(sugRepJs.getJSONObject(i)));
+        	}
+
+        }
+		
+		return result;
+	}
+	
+	public WriteRespondUser getWriteRespondUser(String input) throws Exception{
+		if(input == null || input.isEmpty()) 
+			return null;
+		JSONObject specObject = new JSONObject(input);
+		
+		WriteRespondUser result = (WriteRespondUser)getIncompletedViewRhyme(specObject, new WriteRespondUser());
+		result.isFavorited = specObject.optBoolean("IsFavorited");   
+        JSONObject authorJS = specObject.getJSONObject("Author");
+        result.author = getUserBaseData(authorJS);
+		
+		return result;
+	}
+	
+	public CompletedViewRhyme getCompletedViewRhyme(String input) throws Exception{
+		if(input == null || input.isEmpty()) 
+			return null;
+		JSONObject specObject = new JSONObject(input);
+		CompletedViewRhyme result = (CompletedViewRhyme)getBaseRhyme(specObject, new CompletedViewRhyme());
+		result.points = specObject.getInt("Points");
+		return result;
+	}
+	
+	public NewRhymeReturn getNewRhymeReturn(String input) throws Exception{
+		NewRhymeReturn result = new NewRhymeReturn();
+		JSONObject specObject = new JSONObject(input);
+		result.rhymeId = specObject.getString("RhymeId");
+		result.toEnd = specObject.getString("ToEnd");
+		return result;
+	}
+
+	//todo wyjebac to wtf
+	/*
+	private WriteRespondUser getBaseWRU(JSONObject specObject) throws Exception{
+		WriteRespondUser result = new WriteRespondUser();
+
+        result.rhymeId = specObject.getString("RhymeId");
+        result.title = specObject.getString("Title");
+        result.toEnd = specObject.getString("ToEnd");
+        
+        JSONArray senToShowJs = specObject.getJSONArray("SentencesToShow");
+        
+        int senToShowJsLenght = senToShowJs.length();
+        int i = 0;
+    	for(; i < senToShowJsLenght - 1 ; ++i)
+        	result.sentencesToShow.add(getSentenceToShow(senToShowJs.getJSONObject(i)));
+    	result.sentencesToShow.add(getLastSentenceToShow(senToShowJs.getJSONObject(i)));
+    	
+    	return result;
+	}
+	*/
+	
+	//Helpers:
+	private BaseViewRhyme getBaseRhyme(JSONObject specObject, BaseViewRhyme result) throws Exception{
+        result.rhymeId = specObject.getString("RhymeId");
+        result.curValue = specObject.optString("CurValue");
+        result.title = specObject.getString("Title");
+        
+        JSONArray senToShowJs = specObject.getJSONArray("SentencesToShow");
+        
+        int senToShowJsLenght = senToShowJs.length();
+        int i = 0;
+    	for(; i < senToShowJsLenght - 1 ; ++i)
+        	result.sentencesToShow.add(getSentenceToShow(senToShowJs.getJSONObject(i)));
+    	result.sentencesToShow.add(getLastSentenceToShow(senToShowJs.getJSONObject(i)));
+    	
+    	return result;
+	}
+	
+	private IncompletedViewRhyme getIncompletedViewRhyme(JSONObject specObject, IncompletedViewRhyme result) throws Exception{
+		result = result.getClass().cast( getBaseRhyme(specObject, result) );
+		result.toEnd = specObject.getString("ToEnd");
+		return result;
+	}
+	/*
+	private CompletedViewRhyme getCompletedViewRhyme(JSONObject specObject) throws Exception{
+		CompletedViewRhyme result = (CompletedViewRhyme)getBaseRhyme(specObject);
+		result.points = specObject.getInt("Points");
+		return result;
+	}
+	*/
+	private UserBaseData getUserBaseData(JSONObject userJs) throws Exception{
+		UserBaseData result = new UserBaseData();
+		result.login = userJs.getString("Login");
+		result.email = userJs.optString("Email");
+		return result;
+	}
+	
+	private ReplyToAccepted getReplyToAccepted(JSONObject input) throws Exception{
+		ReplyToAccepted result = new ReplyToAccepted();
+		//result.authorTxt = input.getString("AuthorTxt");
+		result.replyId = input.getInt("ReplyId");
+		result.replyTxt = input.getString("ReplyTxt");
+		JSONObject userJs = input.getJSONObject("User");
+		result.user = getUserBaseData(userJs);
+		return result;
+	}
+	private SentenceToShow getSentenceToShow(JSONObject input) throws Exception{
+		SentenceToShow result = new SentenceToShow();
+		result.authorTxt = input.getString("AuthorTxt");
+		result.replyTxt = input.getString("ReplyTxt");
+		JSONObject userJs = input.getJSONObject("User");
+		result.user = getUserBaseData(userJs);	
+		return result;
+	}
+	//do the same what getSentenceToShow + check before add that last reply != null
+	private SentenceToShow getLastSentenceToShow(JSONObject input) throws Exception{
+		SentenceToShow result = new SentenceToShow();
+		result.authorTxt = input.getString("AuthorTxt");
+		result.replyTxt = input.optString("ReplyTxt");
+		if(!result.replyTxt.isEmpty()){
+			JSONObject userJs = input.getJSONObject("User");
+			result.user = getUserBaseData(userJs);
+		}
+		return result;
+	}
+}

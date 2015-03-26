@@ -1,0 +1,17 @@
+1423656060166	Rename type 'MainService'
+1423656070084	Move compilation unit
+1423657491354	Delete element
+1423988715786	Delete element
+1423988742846	Rename type 'CheckerAbstract'
+1423988835253	Delete element
+1423988888949	Rename type 'RespondChecker'
+1423988979900	Rename type 'RunAlarma'
+1423989033807	Rename type 'RespondCheckerAlarm'
+1423991581195	Rename field 'Completed'
+1423991589471	Rename field 'Incompleted'
+1424001546697	Rename method 'getMain'
+1424016425751	Copy compilation unit
+1424021546208	Delete element
+1424021560257	Copy compilation unit
+1424024637610	Rename type 'ShowNoti'
+1424024656969	Rename type 'CheckForNoti'

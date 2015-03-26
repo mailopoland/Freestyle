@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- android:versionName is send to web service as client version -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mailoskyteam.freestyle"
+    android:versionCode="1"
+    android:versionName="1.0" 
+    android:installLocation="internalOnly" >
+	<!-- android:installLocation="internalOnly" to support notifications -->
+	
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="22" />
+	 <uses-permission android:name="android.permission.INTERNET" />
+	 <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+	 <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        
+        <activity android:name="freestyle.activities.StartSplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="freestyle.activities.SettingActivity" 
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.HelpActivity" 
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.MainMenuActivity"
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.AuthorRhymesMenuActivity" 
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.WithAuthorResRhymesMenuActivity" 
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.FavRhymesMenuActivity" 
+            android:label="@string/label"/>
+        <activity android:name="freestyle.activities.rhymes.AddFirstRhymeActivity" 
+            android:label="@string/label"/>
+         <activity android:name="freestyle.activities.rhymes.NotiRhymeActivity" 
+            android:label="@string/label">
+        	<meta-data
+	        android:name="android.support.PARENT_ACTIVITY"
+	        android:value="freestyle.activities.StartSplashActivity" />
+        </activity>
+        <activity android:name="freestyle.activities.rhymes.spec.ChooseWriteSenStdActivity"
+            android:label="@string/label"/>  
+        <activity android:name="freestyle.activities.rhymes.spec.WriteRespUserStdActivity"
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.WriteRespUserFavActivity"
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.WriteRespUserMyRhymesActivity"
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.ComplRhymeAuthorStdActivity" 
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.ComplRhymeNoAuthorStdActivity" 
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.ComplRhymeNoAuthorFavActivity" 
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.rhymes.spec.ComplRhymeNoAuthorMyRhymesActivity" 
+            android:label="@string/label" />        
+        <activity android:name="freestyle.activities.rhymes.spec.ComplRhymeNoAuthorTopActivity" 
+            android:label="@string/label" />
+        <activity android:name="freestyle.activities.AppCloserActivity"
+        	android:label="@string/label" android:noHistory="true">
+    	</activity>
+        
+        <receiver android:name="freestyle.services.NotiRunner"
+            android:enabled="true">
+        </receiver>
+        <receiver android:name="freestyle.services.Startup">  
+		    <intent-filter>  
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />  
+		    </intent-filter>  
+		</receiver>
+		<service
+        	android:name="freestyle.services.NotiService" >
+    	</service>
+    </application>
+
+</manifest>

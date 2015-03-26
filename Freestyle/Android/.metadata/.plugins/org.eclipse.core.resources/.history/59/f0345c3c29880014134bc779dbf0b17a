@@ -1,0 +1,125 @@
+package freestyle.services;
+
+import org.json.JSONException;
+
+import com.example.freestyle.R;
+
+import android.content.Context;
+
+import freestyle.data.dto.*;
+import freestyle.helpers.DialogBuilder;
+import freestyle.helpers.json.*;
+import freestyle.interfaces.*;
+import freestyle.repositories.*;
+
+public class MainService {
+	
+	//Properties:
+	private IUserRepository userRepoObj;
+	private IRhymeRepository rhymeRepoObj;
+	private JsonConsumer fromJson(){
+		return new JsonConsumer();
+	}
+	private JsonCreator toJson(){
+		return new JsonCreator();
+	}
+	private IUserRepository userRepo(){
+		if(userRepoObj == null)
+			userRepoObj = new UserRepository();
+		return userRepoObj;
+	}
+	private IRhymeRepository rhymeRepo(){
+		if(rhymeRepoObj == null)
+			rhymeRepoObj = new RhymeRepository();
+		return rhymeRepoObj;
+	}
+	
+	
+	//Constructors:
+	public MainService(IUserRepository userRepo, IRhymeRepository rhymeRepo){
+		this.userRepoObj = userRepo;
+		this.rhymeRepoObj = rhymeRepo; 
+	}
+	
+	public MainService(){
+		this(null, null);
+	}
+	
+	//Methods:
+	
+	//POST:
+	public NewRhymeReturn createNewRhyme(NewRhyme newRhyme) throws Exception{
+		String resultString = null;
+		NewRhymeReturn result = null;	
+		String jsonObj = toJson().newRhyme(newRhyme);
+		resultString = rhymeRepo().createNewRhyme(jsonObj);
+		result = fromJson().getNewRhymeReturn(resultString);
+		
+		return result;
+	}
+	
+	public void addReply(ReplyToSave reply) throws Exception{
+		String jsonObj = toJson().newReply(reply);
+		rhymeRepo().addReply(jsonObj);
+	}
+	
+	//GET:
+	public LogInBaseData findUser(String userName, String password) throws Exception{
+		String resultString = null;
+		LogInBaseData result = null;
+		resultString = userRepo().findUser(userName, password);
+		if(resultString != null && !resultString.isEmpty())
+			result = fromJson().getLoginBaseData(resultString);
+		
+		return result;
+	}
+	
+	public LogInBaseData createUser(String userName, String password) throws Exception{
+		String resultString = null;
+		LogInBaseData result = null;
+
+		resultString = userRepo().createUser(userName, password);
+		result = fromJson().getLoginBaseData(resultString);
+
+		return result;
+	}
+	
+	
+	
+	public String minMsgAmount() throws Exception{
+		String result = null;
+
+		result = rhymeRepo().minMsgAmount();
+		//dialog().problemWithLogin();
+		
+		return result;
+	}
+	
+	public ChooseWriteSentence getRhymeAuthorIncomplSortId(String userId, String curValue, boolean isNext) throws Exception{
+		
+		ChooseWriteSentence result = null;
+
+		String resultString = rhymeRepo().getRhymeAuthorIncomplSortId(userId, curValue, isNext);
+		result = fromJson().getChooseWriteSentence(resultString);
+		
+		return result;
+	}
+	
+	public WriteRespondUser getWRU(String userId, String curValue, boolean isNext) throws Exception{
+		WriteRespondUser result = null;
+
+		String resultString = rhymeRepo().getRhymeNoAuthorIncomplSortId(userId, curValue, isNext);
+		result = fromJson().getWriteRespondUser(resultString);
+
+		return result;
+	}
+	
+	public CompletedViewRhyme getMyCompl(String userId, String curValue, boolean isNext) throws Exception{
+		CompletedViewRhyme  result = null;
+		
+		String resultString = rhymeRepo().getRhymeAuthorComplFinishDate(userId, curValue, isNext);
+		result = fromJson().getCompletedViewRhyme(resultString);
+		
+		return result;
+	}
+}

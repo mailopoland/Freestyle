@@ -1,0 +1,19 @@
+package freestyle.data.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BaseViewRhyme {
+	
+	public BaseViewRhyme(){
+		this.sentencesToShow = new ArrayList<SentenceToShow>();
+	}
+	//universal for all views, contain information needed to load next item
+	//it is only remember for send back to WS when need next item 
+	//(so no it is not convert from string)
+	public String curValue;
+	
+	public String title;
+	public List<SentenceToShow> sentencesToShow;
+	
+}

@@ -1,0 +1,73 @@
+package freestyle.activities;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+
+import com.example.freestyle.R;
+
+import freestyle.activities.rhymes.AddFirstRhymeActivity;
+import freestyle.adapters.CustomMenuViewAdapter;
+import freestyle.helpers.outin.downloaders.DownloaderStandard;
+import freestyle.repositories.RepoDefaultReq;
+
+
+public class AuthorRhymesMenuActivity extends AppMenuActivity {
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu);
+        
+        ArrayList<String> gridArray = new ArrayList<String>(); 
+        gridArray.add( getString(R.string.new_rhyme));
+        gridArray.add( getString(R.string.continue_my));
+        gridArray.add( getString(R.string.reply_by_rhyme) );
+        gridArray.add( getString(R.string.your_rhymes) );
+        gridArray.add( getString(R.string.with_yours_rhymes) );
+        GridView grid = (GridView) findViewById(R.id.grid);
+        grid.setAdapter(new CustomMenuViewAdapter(this, R.layout.adapter_row_menu, gridArray));
+        grid.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position,
+                    long id) {
+            	Context curContext = AuthorRhymesMenuActivity.this;
+            	DownloaderStandard downloader = null;
+            	Intent intent = null;
+            	switch(position){
+	            	case 0:
+	            		//new rhyme
+	            		intent = new Intent(curContext, AddFirstRhymeActivity.class);
+	            		break;
+	            	case 1:
+	            		//continue my incompl
+	            		downloader = new RepoDefaultReq(curContext).chooseWriteSenSugRep();
+	            		break;
+	            	case 2:
+	            		//reply by rhyme
+	            		downloader = new RepoDefaultReq(curContext).writeRespUserCreateLastSen();
+	            		break;
+	            	case 3:
+	            		//my compl rhymes
+	            		downloader = new RepoDefaultReq(curContext).complRhymeAuthorStd();
+	            		break;
+	            	case 4:
+	            		//with my rhymes (responds)
+	            		intent = new Intent(curContext, WithAuthorResRhymesMenuActivity.class);
+	            		break;
+            	}	
+            	if(downloader != null)
+            		downloader.execute();
+            	else if(intent != null)
+            		startActivity(intent);
+            }
+        });
+    }
+}

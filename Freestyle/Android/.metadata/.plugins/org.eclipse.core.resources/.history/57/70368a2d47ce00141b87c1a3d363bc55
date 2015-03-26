@@ -1,0 +1,20 @@
+package freestyle.helpers.outin.downloaders;
+
+import android.content.Context;
+
+//DownloaderStandard plus display message about sorting after correct downloading
+public abstract class DownloaderStandardSortMsg extends DownloaderStandard{
+
+	private int sortStringId;
+	
+	public DownloaderStandardSortMsg(Context curContext, Class<?> newActivity, int sortStringId) {
+		super(curContext, newActivity);
+		this.sortStringId = sortStringId;
+	}
+
+	@Override  
+    protected void doIfSuccessed()  
+    {  
+		super.doIfSuccessed();
+    }	
+}

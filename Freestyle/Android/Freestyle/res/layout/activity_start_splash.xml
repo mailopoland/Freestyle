@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+   	tools:ignore="UseCompoundDrawables"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center"  >
+
+	<ProgressBar
+	    android:layout_width="15dp"
+	    android:layout_height="19dp"
+	    android:paddingBottom="4dp"
+	    android:layout_alignBottom="@+id/loading_txt"
+	    android:layout_toLeftOf="@+id/loading_txt"
+	    android:indeterminate="true" />
+
+	<ImageView
+	    android:id="@+id/splash_logo"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:layout_marginBottom="15dp"
+	    android:contentDescription="@string/login_to_srv"
+	    android:src="@drawable/splash" />
+
+	<TextView
+	    android:id="@+id/loading_txt"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/splash_logo"
+	    android:layout_centerHorizontal="true"
+	    android:text="@string/login_to_srv"
+	    android:textColor="@color/white"
+	    android:layout_marginLeft="5dp"
+	    android:textSize="15sp" />
+
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="user_login_max_length">22</integer>
+    <integer name="user_login_min_length">4</integer>
+    <!-- email not use now, stay here for future -->
+    <integer name="user_email_max_length">40</integer>
+    <integer name="user_email_min_length">6</integer>
+    <!-- end unused email -->
+    <integer name="rhyme_title_max_length">35</integer>
+    <integer name="rhyme_title_min_length">3</integer>
+    <integer name="rhyme_msg_max_length">48</integer>
+    <integer name="rhyme_msg_min_length">6</integer>
+</resources>

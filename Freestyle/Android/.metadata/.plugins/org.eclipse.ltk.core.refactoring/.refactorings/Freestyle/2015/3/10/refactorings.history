@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;isNext&apos; in &apos;freestyle.helpers.outin.downloaders.DownloaderRhymeActiv&apos; to &apos;isRightDir&apos;&#x0D;&#x0A;- Original project: &apos;Freestyle&apos;&#x0D;&#x0A;- Original element: &apos;freestyle.helpers.outin.downloaders.DownloaderRhymeActiv.isNext&apos;&#x0D;&#x0A;- Renamed element: &apos;freestyle.helpers.outin.downloaders.DownloaderRhymeActiv.isRightDir&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;isNext&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;freestyle.helpers.outin.downloaders{DownloaderRhymeActiv.java[DownloaderRhymeActiv^isNext" name="isRightDir" references="true" setter="false" stamp="1425571467362" textual="false" version="1.0"/>
+</session>

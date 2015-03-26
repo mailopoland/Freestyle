@@ -1,0 +1,86 @@
+package freestyle;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.example.freestyle.R;
+
+public class SharedPref {
+	
+	public enum Keys {
+		
+		USER_KEY("USER_KEY"),
+		USER_ACCOUNT("USER_ACCOUNT"),
+		USER_LOGIN("USER_LOGIN"),
+		USER_EMAIL("USER_EMAIL"),
+		NO_RESP_NOTI("NO_RESP_NOTI"),
+		NO_ACCEPT_NOTI("NO_ACCEPT_NOTI"),
+		NO_SHOW_INSTRUCTION("NO_SHOW_INSTRUCTION"),
+		NOTI_FREQ("NOTI_FREQ"),
+		PREPARE_USER_IT("PREPARE_USER_IT");
+		
+		
+		private final String text;
+		
+		private Keys(final String text){
+			this.text = text;
+		}
+		
+		@Override
+		public String toString(){
+			return text;
+		}
+	}
+	//string
+	public static void setMain(SharedPref.Keys key, String value, Context context) {
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+	    	SharedPreferences.Editor editor = prefs.edit();
+	    	editor.putString(key.toString(), value);
+	    	editor.commit();
+		}
+	}
+	//boolean
+	public static void setMain(SharedPref.Keys key, Boolean value, Context context) {
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+	    	SharedPreferences.Editor editor = prefs.edit();
+	    	editor.putBoolean(key.toString(), value);
+	    	editor.commit();
+		}
+	}
+	//int
+	public static void setMain(SharedPref.Keys key, int value, Context context){
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = prefs.edit();
+	    	editor.putInt(key.toString(), value);
+	    	editor.commit();
+		}
+	}
+	public static String getMainStr(SharedPref.Keys key, Context context) {
+		String result = null;
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+	    	result = prefs.getString(key.toString(), null);
+		}
+		return result;
+	}
+	public static boolean getMainBool(SharedPref.Keys key, Context context) {
+		boolean result = false;
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+	    	result = prefs.getBoolean(key.toString(), false);
+		}
+		return result;
+	}
+	public static int getMainInt(SharedPref.Keys key, Context context) {
+		int result = 0;
+		if(context != null){
+			SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_share_pref_main), Context.MODE_PRIVATE);
+	    	result = prefs.getInt(key.toString(), 0);
+		}
+		return result;
+	}
+	
+}

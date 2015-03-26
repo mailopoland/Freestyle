@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/rhyme_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Pierwsza gadka"
+            android:textSize="17sp"
+            android:textStyle="bold" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/need_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/min"
+            android:text="Jeszcze"
+            android:textSize="12sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/min_value"
+            android:text="min."
+            android:textSize="12sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/min_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="10"
+            android:textSize="12sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/(mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/author_text"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/author_name"
+            android:text="("
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mail)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/author_text"
+
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/author_email"
+            android:text=")"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/author_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_alignLeft="@+id/rhyme_title"
+            android:layout_below="@+id/rhyme_title"
+            android:text="@string/author"
+            android:textStyle="italic"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/author_text"
+            android:layout_alignBottom="@+id/author_text"
+            android:layout_toRightOf="@+id/author_text"
+            android:layout_marginLeft="3dp"
+            android:text="Tomek"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/author_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/author_name"
+            android:layout_alignBottom="@+id/author_name"
+            android:layout_toRightOf="@+id/(mail"
+            android:text="xyz@gmail.com"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/2nd_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/(mail"
+            android:layout_marginTop="24dp"
+            android:text="Położyłem się dalej, myślę tak trzeba..."
+            android:textSize="14sp" />
+
+		<TextView
+		    android:id="@+id/1st_msg"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/2nd_msg"
+		    android:layout_marginTop="17dp"
+		    android:text="...Ledwo wstałem, myślę kurde się nie da"
+		    android:textSize="14sp" />
+
+		<TextView
+		    android:id="@+id/3rd_msg"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/1st_msg"
+		    android:layout_marginTop="20dp"
+		    android:text="A tu krzyczy baba w niebogłosy..."
+		    android:textSize="14sp" />
+
+    </RelativeLayout>

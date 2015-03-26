@@ -1,0 +1,73 @@
+package freestyle.data.repositories;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.os.AsyncTask;
+
+public class BaseRepository extends AsyncTask<String,Void,String> {
+	protected String connectionUrl = "http://10.0.2.2:62373/Service.svc/";
+			//"https://localhost:44301/Service.svc/";
+	
+	
+	private String createUrl(String... args){
+		String result = null;
+		
+		StringBuilder builder = new StringBuilder(connectionUrl);
+		builder.append(args[0]);
+		for( int i = 1; i < args.length; i++){
+			builder.append('/');
+			builder.append(args[i]);
+		}
+		result = builder.toString();
+		
+		return result;
+	}
+	
+	protected String doInBackground(String... args){
+		if(args.length < 1){
+			return null;
+		}
+		String result = null;
+		String url = this.createUrl(args);
+		HttpResponse response = null;
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet get = new HttpGet("http://10.0.2.2:49841/");
+		get.setHeader("Accept", "application/json"); 
+		get.setHeader("Content-type", "application/json"); 
+				//new HttpGet(url);
+		try{
+			response = httpclient.execute(get);
+		    StatusLine statusLine = response.getStatusLine();
+		    if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+		        ByteArrayOutputStream out = new ByteArrayOutputStream();
+		        response.getEntity().writeTo(out);
+		        out.close();
+		        result = out.toString();
+		    } else{
+		        throw new IOException(statusLine.getReasonPhrase());
+		    }
+		} catch(Exception ex){
+			String msg = ex.getMessage();
+			//todo signal app that is problem wit connection
+		} finally{
+			if(response != null){
+				try{
+					response.getEntity().getContent().close();
+				} catch(Exception ex){
+					//todo signal to programmers that is problem with close connection
+				}
+			}
+		}
+		
+		return result;
+	}
+}

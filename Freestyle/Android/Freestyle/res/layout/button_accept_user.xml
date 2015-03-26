@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+	<Button
+	    style="@style/Sentence_Accept_Button"
+	    android:id="@+id/accept_button"
+	    android:background="@drawable/accept_user_sen"
+	/>
+
+</RelativeLayout>

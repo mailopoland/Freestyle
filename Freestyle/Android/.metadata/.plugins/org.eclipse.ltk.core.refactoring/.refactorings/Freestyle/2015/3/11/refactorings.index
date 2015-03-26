@@ -1,0 +1,43 @@
+1425904118033	Rename method 'setEmail'
+1425931955221	Rename local variable 'prefNotiChangeAcc'
+1425937152983	Rename type 'AppCloser'
+1426070381368	Move compilation unit
+1426070387416	Move compilation unit
+1426070480812	Move compilation units
+1426070536612	Rename package 'freestyle.data.dto.fromdb.bases'
+1426070550472	Rename package 'freestyle.data.dto.fromdb.extend'
+1426070635691	Move compilation unit
+1426071080830	Move compilation units
+1426071124364	Move compilation units
+1426071179604	Move compilation units
+1426164057623	Move compilation unit
+1426168911266	Copy compilation unit
+1426175723912	Rename method 'yesOrNo'
+1426176369839	Rename method 'confirm'
+1426176384992	Rename method 'confirm'
+1426180664878	Rename type 'SendEmail'
+1426184437305	Rename method 'simpleDialog'
+1426257885016	Delete element
+1426259288098	Rename field 'curContext'
+1426259650466	Rename field 'curContext'
+1426261987766	Rename type 'ActionSentenceCommunicateViewFragment'
+1426262349566	Delete element
+1426263328906	Rename type 'ReplyChooseViewFragment'
+1426263419907	Rename type 'SentenceCommunicateViewFragment'
+1426263439949	Rename type 'ReplyCommunicateViewFragment'
+1426264120447	Rename enum constant 'OTHER_OPT_FR_TAG'
+1426264141969	Rename field 'otherOptFrTag'
+1426265342613	Rename method 'create'
+1426265369608	Rename method 'createSettingsSetString'
+1426265398206	Rename method 'create'
+1426265426543	Rename method 'create'
+1426265439976	Rename method 'create'
+1426265458094	Rename method 'create'
+1426265494160	Rename method 'create'
+1426265502937	Rename method 'setRhymeToSave'
+1426265520140	Rename method 'setReqRhyme'
+1426265530104	Rename method 'setReplyToSave'
+1426265539922	Rename method 'setNewRhyme'
+1426265553994	Rename method 'setSettingsSetString'
+1426268342043	Rename type 'DecoratorForWs'
+1426268602637	Extract interface 'IJsonCreator'

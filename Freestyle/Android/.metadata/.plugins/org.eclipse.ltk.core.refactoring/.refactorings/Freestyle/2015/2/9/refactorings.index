@@ -1,0 +1,49 @@
+1424678276395	Rename method 'createListSentencesToShow'
+1424678294777	Rename method 'createSentenceToShow'
+1424678300856	Rename method 'createUserBaseData'
+1424691062273	Move compilation unit
+1424692105727	Rename type 'WriteRespUserNotiActivity'
+1424692215870	Copy compilation unit
+1424697355648	Delete element
+1424697925319	Delete element
+1424699585477	Copy compilation unit
+1424699962960	Delete element
+1424700114857	Rename type 'ComplRhymeAuthorActivity'
+1424700330362	Copy compilation unit
+1424700384752	Copy compilation unit
+1424700432626	Delete element
+1424700532823	Copy compilation unit
+1424700584907	Delete element
+1424715781291	Rename method 'ComplRhymeNoAuthorFav'
+1424715786334	Rename method 'WriteRespUserFav'
+1424715791874	Rename method 'ComplRhymeNoAuthorTop'
+1424715797750	Rename method 'ComplRhymeNoAuthorStd'
+1424715803562	Rename method 'ComplRhymeNoAuthorMyRhymes'
+1424715808242	Rename method 'WriteRespUserMyRhymes'
+1424715813404	Rename method 'ComplRhymeAuthorStd'
+1424715818527	Rename method 'WriteRespUserStd'
+1424715823580	Rename method 'ChooseWriteSenStd'
+1424715866906	Delete element
+1424715970393	Rename package 'freestyle.helpers.Downloaders.Uploaders'
+1424942159444	Delete elements
+1424942166821	Move file
+1424942420482	Rename resource 'accept-choose_write_sentence.png'
+1424942640967	Delete element
+1424945027456	Rename resource 'logo_splash.png'
+1424945046997	Delete element
+1424945166130	Delete element
+1424946715129	Move compilation unit
+1424946840652	Rename method 'showProgressDialogDownload'
+1424947272963	Move compilation unit
+1424947307460	Rename type 'Uploader'
+1424947415641	Rename type 'UploadProgressDialog'
+1424950463923	Rename method 'doIfSuccessed'
+1424966875197	Delete element
+1424966877594	Delete element
+1424973166319	Delete element
+1424973303868	Delete element
+1425033439016	Rename method 'getAppCodeVersion'
+1425050443755	Rename method 'execute'
+1425059062090	Infer generic type arguments
+1425059130581	Delete element
+1425122797423	Encapsulate field 'repoHandler'

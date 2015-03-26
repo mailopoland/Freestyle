@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Do CV na gita\Freestyle\Project\.metadata\.plugins\org.eclipse.jdt.core
+1582898105.index
+371459192.index
+1284074322.index

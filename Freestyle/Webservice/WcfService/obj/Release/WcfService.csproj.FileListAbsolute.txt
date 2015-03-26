@@ -1,0 +1,17 @@
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\WcfService.dll.config
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\WcfService.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\WcfService.pdb
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Elmah.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\EntityFramework.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\EntityFramework.SqlServer.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Microsoft.AspNet.Identity.Core.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Newtonsoft.Json.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\EntityFramework.xml
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\EntityFramework.SqlServer.xml
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\bin\Newtonsoft.Json.xml
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\obj\Release\WcfService.csprojResolveAssemblyReference.cache
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\obj\Release\WcfService.dll
+D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Individual project\Freestyle\Webservice\WcfService\obj\Release\WcfService.pdb

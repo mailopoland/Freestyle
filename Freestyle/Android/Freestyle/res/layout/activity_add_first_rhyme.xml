@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    >
+
+    <EditText
+        android:id="@+id/title_edit"
+        style="@style/Title_BaseStyle"
+        android:maxLength="@integer/rhyme_title_max_length"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:hint="@string/title"
+        android:inputType="textShortMessage|textCapSentences|textMultiLine"
+        android:background="@drawable/edit_text_title" >
+        <requestFocus />
+    </EditText>
+	
+    <fragment android:name="freestyle.fragments.AuthorRhymeEditFragment"
+            android:id="@+id/author_rhyme_edit_fragment"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/title_edit" 
+            android:layout_marginTop="10dp"/>
+</RelativeLayout>

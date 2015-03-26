@@ -1,0 +1,26 @@
+package freestyle.data.app;
+
+//contains keys for bundle (put here to not make duplicates)
+public enum BundleEnum {
+	AMOUNT,
+	AUTHOR_EDITOR_FR_TAG,
+	AUTHOR_JSON,
+	CAN_VOTE,
+	COMMUNICATE_FR_TAG,
+	IS_FAVORITE,
+	LAST_SENT_ID,
+	MSG_ID,
+	OTHER_OPT_FR_TAG,
+	POINTS,
+	RESTORE,
+	RHYME_ID,
+	RHYME_OBJ,
+	RHYME_TO_SAVE_JSON,
+	RHYME_WITH_SEN_TO_SAVE_JSON,
+	REPLIES_TO_ACCEPT_JSON,
+	SENTENCES_CONTAINER,
+	SENTENCE,
+	TO_END_FR_TAG,
+	TXT,
+	TXT_ID,
+}

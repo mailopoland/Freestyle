@@ -1,0 +1,194 @@
+package freestyle.repositories;
+
+import com.example.freestyle.R;
+
+import android.app.Activity;
+import android.content.Context;
+import freestyle.Global;
+import freestyle.SharedPref;
+import freestyle.activities.rhymes.spec.ChooseWriteSenStdActivity;
+import freestyle.activities.rhymes.spec.ComplRhymeAuthorStdActivity;
+import freestyle.activities.rhymes.spec.ComplRhymeNoAuthorFavActivity;
+import freestyle.activities.rhymes.spec.ComplRhymeNoAuthorMyRhymesActivity;
+import freestyle.activities.rhymes.spec.ComplRhymeNoAuthorStdActivity;
+import freestyle.activities.rhymes.spec.ComplRhymeNoAuthorTopActivity;
+import freestyle.activities.rhymes.spec.WriteRespUserFavActivity;
+import freestyle.activities.rhymes.spec.WriteRespUserMyRhymesActivity;
+import freestyle.activities.rhymes.spec.WriteRespUserStdActivity;
+import freestyle.data.dto.fromdb.rhymes.extend.NoAuthorRhyme;
+import freestyle.data.dto.todb.ReqRhyme;
+import freestyle.helpers.json.JsonConsumer;
+import freestyle.helpers.outin.downloaders.DownloaderStandard;
+import freestyle.helpers.outin.downloaders.DownloaderStandardSortMsg;
+
+//handle request witch don't care about prev value,
+//should be use to get first (default) obj from the obj's category
+//use adapter RepoHandler to create and return DownloaderStandard object
+public class RepoDefaultReq{
+
+	private String userKey(){
+		return SharedPref.getMainStr(SharedPref.Keys.USER_KEY, curContext);
+	}
+	private final Context curContext;
+	
+	
+	public RepoDefaultReq(Context curContext){
+		this.curContext = curContext;
+	}
+	
+	public DownloaderStandardSortMsg chooseWriteSenStdSortId(){
+		return new DownloaderStandardSortMsg(curContext, ChooseWriteSenStdActivity.class, R.string.newest_create_date) {
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeAuthorIncomplSortId(userKey(), Global.newestId, Global.newestIsNext);
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg chooseWriteSenStd(){
+		return new DownloaderStandardSortMsg(curContext, ChooseWriteSenStdActivity.class, R.string.newest_sug_rep) {
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeAuthorIncomplSortSugRepId(userKey(), Global.newestId, String.valueOf(Global.newestId), Global.newestIsNext);
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg writeRespUserStd(){
+		return new DownloaderStandardSortMsg(curContext, WriteRespUserStdActivity.class, R.string.newest_last_sentence) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				//modification date is change when user add new sentence (or finish rhyme)
+				return getRepoHandler().getRhymeNoAuthorIncomplSortModDate(getDefaultDateReqRhyme());
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg complRhymeAuthorStd(){
+		return new DownloaderStandardSortMsg(curContext, ComplRhymeAuthorStdActivity.class, R.string.newest_finish_date) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeAuthorComplSortFinishDate(getDefaultDateReqRhyme());
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg writeRespUserMyRhymes(){
+		return new DownloaderStandardSortMsg(curContext, WriteRespUserMyRhymesActivity.class, R.string.newest_create_date) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorOwnResIncomplSortId(userKey(), Global.newestId, Global.newestIsNext);
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg complRhymeNoAuthorMyRhymes(){
+		return new DownloaderStandardSortMsg(curContext, ComplRhymeNoAuthorMyRhymesActivity.class, R.string.newest_create_date) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorOwnResComplSortId(userKey(), Global.newestId, Global.newestIsNext);
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg complRhymeNoAuthorStd(){
+		return new DownloaderStandardSortMsg(curContext, ComplRhymeNoAuthorStdActivity.class, R.string.newest_finish_date) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorComplSortFinishDate(getDefaultDateReqRhyme());
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg complRhymeNoAuthorTop(){
+		return new DownloaderStandardSortMsg(curContext, ComplRhymeNoAuthorTopActivity.class, R.string.higest_vote_value) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorComplSortVoteValue(getDefaultVoteReqRhyme());
+			}
+		};
+	}
+	
+	public DownloaderStandardSortMsg writeRespUserFav(){
+		return new DownloaderStandardSortMsg(curContext, WriteRespUserFavActivity.class, R.string.newest_create_date) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorFavIncomplSortId(userKey(), Global.newestId, Global.newestIsNext);
+			}
+		};
+	}
+	
+	public DownloaderStandard complRhymeNoAuthorFav(){
+		return new DownloaderStandard(curContext, ComplRhymeNoAuthorFavActivity.class) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorFavComplSortId(userKey(), Global.newestId, Global.newestIsNext);
+			}
+		};
+	}
+	
+	//for noti
+	
+	public DownloaderStandard acceptUnshown(final Activity curActivity){
+		return new DownloaderStandard(curContext, null) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeNoAuthorUnshown(userKey());
+			}
+			
+			//little more complicated because have to check that is completed or not rhyme
+			@Override
+			protected void doIfSuccessed() {
+				JsonConsumer jsCon = new JsonConsumer();
+				//json consumer get field completed or incompleted
+				NoAuthorRhyme rhyme = jsCon.getNoAuthorRhyme(getDownloaded());
+				if(rhyme.incompleted != null && rhyme.incompleted != ""){
+					doIfSuccessedHelper(rhyme.incompleted, WriteRespUserStdActivity.class);
+				}
+				else{
+					doIfSuccessedHelper(rhyme.completed, ComplRhymeNoAuthorStdActivity.class);
+				}
+			}
+			@Override
+			protected void replaceOnPostExecute(Boolean downloadError)  
+		    { 
+				super.replaceOnPostExecute(downloadError);
+				curActivity.finish();
+		    }
+		};
+	}
+	
+	public DownloaderStandard respUnshown(final Activity curActivity){
+		return new DownloaderStandard(curContext, ChooseWriteSenStdActivity.class) {
+			
+			@Override
+			protected String downloadRhyme() throws Exception {
+				return getRepoHandler().getRhymeAuthorIncomplUnshown(userKey());
+			}
+			
+			@Override
+			protected void replaceOnPostExecute(Boolean downloadError)  
+		    { 
+				super.replaceOnPostExecute(downloadError);
+				curActivity.finish();
+		    }
+		};
+	}
+	
+	private ReqRhyme getDefaultDateReqRhyme(){
+		return new ReqRhyme(userKey(), Global.newestId, Global.newestDate, Global.newestIsNext);
+	}
+	
+	private ReqRhyme getDefaultVoteReqRhyme(){
+		return new ReqRhyme(userKey(), Global.newestId, Global.newestVote, Global.newestIsNext);
+	}
+}

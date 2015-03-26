@@ -1,0 +1,311 @@
+package freestyle.fragments;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+
+import com.example.freestyle.R;
+
+import freestyle.Global;
+import freestyle.SharedPref;
+import freestyle.activities.StartSplashActivity;
+import freestyle.helpers.DialogBuilder;
+import freestyle.helpers.UserGoogleInfoFetcher;
+import freestyle.helpers.Validator;
+import freestyle.helpers.outin.uploaders.settings.UploadNotiAccept;
+import freestyle.helpers.outin.uploaders.settings.UploadNotiFreq;
+import freestyle.helpers.outin.uploaders.settings.UploadNotiResp;
+import freestyle.helpers.outin.uploaders.settings.UploadShowEmail;
+import freestyle.helpers.outin.uploaders.settings.UploadUserName;
+import freestyle.services.Schedule;
+
+public class SettingsFragment extends PreferenceFragment{
+
+	private Context curContext;
+	
+	//get from R
+	private String editor_user_name;
+	//private final String editor_user_email;
+	private String editor_show_email;
+	private String editor_noti_resp;
+	private String editor_noti_accept;
+	private String editor_noti_freq;
+	private String editor_change_acc;
+	
+	private UserGoogleInfoFetcher accManager;
+	
+	@Override
+	public void onAttach(Activity activity){
+		super.onAttach(activity);
+		this.curContext = activity;
+		this.editor_user_name = curContext.getString(R.string.pref_key_user_name);
+		//this.editor_user_email = curContext.getString(R.string.pref_key_user_email);
+		this.editor_show_email = curContext.getString(R.string.pref_key_show_email);
+		this.editor_noti_resp = curContext.getString(R.string.pref_key_noti_resp);
+		this.editor_noti_accept = curContext.getString(R.string.pref_key_noti_accept);
+		this.editor_noti_freq = curContext.getString(R.string.pref_key_noti_freq);
+		this.editor_change_acc = curContext.getString(R.string.pref_key_change_account);
+		this.accManager = new UserGoogleInfoFetcher(curContext);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		 super.onCreate(savedInstanceState);
+		 addPreferencesFromResource(R.xml.settings);
+		 final EditTextPreference prefUserName = (EditTextPreference)findPreference(editor_user_name);
+		 //final Preference prefUserEmail = findPreference(editor_user_email);
+		 final CheckBoxPreference prefShowEmail = (CheckBoxPreference)findPreference(editor_show_email);
+		 final CheckBoxPreference prefNotiResp = (CheckBoxPreference)findPreference(editor_noti_resp);
+		 final CheckBoxPreference prefNotiAccept = (CheckBoxPreference)findPreference(editor_noti_accept);
+		 final ListPreference prefNotiFreq = (ListPreference)findPreference(editor_noti_freq);
+		 final ListPreference prefChangeAcc = (ListPreference)findPreference(editor_change_acc);
+		 
+		 final String userAccount = SharedPref.getMainStr(SharedPref.Keys.USER_ACCOUNT, curContext);
+		 final String userLogin = SharedPref.getMainStr(SharedPref.Keys.USER_LOGIN, curContext);
+		 final String userEmail = SharedPref.getMainStr(SharedPref.Keys.USER_EMAIL, curContext);
+		 final boolean notiResp = !SharedPref.getMainBool(SharedPref.Keys.NO_RESP_NOTI, curContext);
+		 final boolean notiAccept = !SharedPref.getMainBool(SharedPref.Keys.NO_ACCEPT_NOTI, curContext);
+		 final int notiFreq = SharedPref.getMainInt(SharedPref.Keys.NOTI_FREQ, curContext);
+		 final CharSequence[] accountsNames = accManager.getAccountsNames();
+		 
+		 final Validator validator = new Validator(curContext);
+		 setPrefUserName(prefUserName, userLogin, validator);
+//		 setPrefUserEmail( prefUserEmail, userEmail, validator);
+		 setPrefShowEmail( prefShowEmail,  isSetUserEmail(userEmail), userAccount);
+		 setPrefNotiResp(prefNotiResp, notiResp, validator,	prefNotiFreq);
+		 setPrefNotiAccept(prefNotiAccept, notiAccept, validator, prefNotiFreq);
+		 setPrefNotiFreq( prefNotiFreq, notiFreq);
+		 setPrefChangeAccount(prefChangeAcc, accountsNames, userAccount);
+	}
+	
+	
+			 
+	@Override
+	public boolean onPreferenceTreeClick (PreferenceScreen preferenceScreen, Preference preference){
+		return true;
+	}
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(BaseFragment.shouldSetRetainInst);
+    }
+	//check all prefernces and add global settings for them
+	private boolean checkPref(final Preference pref){
+		if(pref != null){
+			pref.setPersistent(false);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	private void setPrefUserName(final EditTextPreference prefUserName, String userLogin, final Validator validator){
+		if(checkPref(prefUserName)){
+			prefUserName.setText(userLogin);
+			prefUserName.setSummary(userLogin);
+			prefUserName.setOnPreferenceChangeListener(
+					 new Preference.OnPreferenceChangeListener() {
+						
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+							String newUserName = newValue.toString();
+							if(!validator.isValidLogin(newUserName)){
+								new DialogBuilder(curContext).validationError(curContext.getString(R.string.min_lenght) + validator.isValidLoginTextMinAmount());
+								
+							}
+							else{
+								new UploadUserName(curContext, newUserName).execute();
+								prefUserName.setSummary(newUserName);
+							}
+							return true;
+						}
+					}
+			 );
+		 }
+	}
+	
+	private boolean isSetUserEmail(String userEmail){
+		return (userEmail != null && !userEmail.equals(""));
+	}
+	private void setPrefShowEmail(final CheckBoxPreference prefShowEmail, final boolean isShowEmail, final String userAccount){
+		if(checkPref(prefShowEmail)){
+			 prefShowEmail.setChecked(isShowEmail);
+			//userAccount = user's email
+			 prefShowEmail.setSummary(userAccount);
+		 	 prefShowEmail.setOnPreferenceChangeListener(
+				 new Preference.OnPreferenceChangeListener() {
+					
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						boolean show = (Boolean)newValue;
+						//userAccount = user's email
+						new UploadShowEmail(curContext, show, userAccount).execute();
+						return true;
+					}
+				}
+			 );
+		 }
+	}
+	
+	private void setPrefNotiResp(final CheckBoxPreference prefNotiResp, boolean notiResp, final Validator validator, final Preference prefNotiFreq){
+		if(checkPref(prefNotiResp)){
+			 prefNotiResp.setChecked(notiResp);
+			 prefNotiResp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+						
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+			 				boolean noNoti = !(Boolean)newValue;
+			 				new UploadNotiResp(curContext, noNoti).execute();
+			 				//prefNotiResp.setChecked(!noNoti);
+			 				setVisableNotiFreq(prefNotiFreq, noNoti, SharedPref.getMainBool(SharedPref.Keys.NO_ACCEPT_NOTI, curContext));
+							return true;
+						}
+			 });
+		 }
+	}
+	
+	private void setPrefNotiAccept(final CheckBoxPreference prefNotiAccept, boolean notiResp, final Validator validator, final Preference prefNotiFreq){
+		if(checkPref(prefNotiAccept)){
+			 prefNotiAccept.setChecked(notiResp);
+			 prefNotiAccept.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+						
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+			 				boolean noNoti = !(Boolean)newValue;
+			 				new UploadNotiAccept(curContext, noNoti).execute();
+			 				//prefNotiAccept.setChecked(!noNoti);
+			 				setVisableNotiFreq(prefNotiFreq, noNoti, SharedPref.getMainBool(SharedPref.Keys.NO_RESP_NOTI, curContext));
+							return true;
+						}
+			 });
+		 }
+	}
+	
+
+	
+	
+	private void setPrefChangeAccount(final ListPreference prefChangeAcc, final CharSequence[] accountsNames, final String userAccount){
+		//if user delete current use google account
+		if(!Global.prepareLoginForTesting && (accountsNames == null || accountsNames.length < 1 || !accManager.accountIsOnDevice(userAccount))){
+			deleteSelectedAccount();
+		}
+		else if(checkPref(prefChangeAcc)){
+			prefChangeAcc.setEntryValues(accountsNames);
+			prefChangeAcc.setEntries(accountsNames);
+			prefChangeAcc.setValue(userAccount);
+			prefChangeAcc.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						String newAccount = newValue.toString();
+			 			SharedPref.setMain(SharedPref.Keys.USER_ACCOUNT, newAccount, curContext);
+			 			Intent intent = new Intent(curContext, StartSplashActivity.class);
+			 			//clear back stack when user is changed (new user shouldn't see previous user's views) 
+			 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+		                startActivity(intent);
+		                finish();
+		                return true;
+					}
+			 });
+		}
+	}
+	
+	private void deleteSelectedAccount(){
+		new DialogBuilder(curContext).deleteCurAccount();
+	}
+	
+	private void setVisableNotiFreq(Preference prefNotiFreq, boolean fstNoNoti, boolean sndNoNoti){
+		if(checkPref(prefNotiFreq)){
+			boolean prevEnabled = prefNotiFreq.isEnabled();
+			boolean enabled = !(fstNoNoti && sndNoNoti);
+			prefNotiFreq.setEnabled(enabled);
+			if(enabled != prevEnabled){
+				Schedule schedule = new Schedule(curContext);
+				if(enabled)
+					schedule.run();
+				else
+					schedule.cancel();
+			}
+		}
+	}
+	
+	private void setPrefNotiFreq(final ListPreference prefNotiFreq, int notiFreq){
+		 if(checkPref(prefNotiFreq)){
+			 String value = Integer.toString(notiFreq);
+			 int indexOfValue = prefNotiFreq.findIndexOfValue(value);
+			 if(indexOfValue < 0)
+			 {
+				 //get default value
+				 value = Integer.toString(Global.defaultNotiFreq);
+				 indexOfValue = prefNotiFreq.findIndexOfValue(value);
+			 }
+			 
+			 if(indexOfValue > -1)
+			 {
+				 prefNotiFreq.setValueIndex(indexOfValue);
+				 String entity = (prefNotiFreq.getEntries()[indexOfValue]).toString();
+				 prefNotiFreq.setSummary(entity);
+			 }
+			 
+			 setVisableNotiFreq(prefNotiFreq, 
+					 SharedPref.getMainBool(SharedPref.Keys.NO_ACCEPT_NOTI, curContext), 
+					 SharedPref.getMainBool(SharedPref.Keys.NO_RESP_NOTI, curContext));
+			 prefNotiFreq.setOnPreferenceChangeListener(
+					 new Preference.OnPreferenceChangeListener() {
+						
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+							final String newValueString = newValue.toString();
+							final int newValueInt = Integer.parseInt(newValueString); 
+							new UploadNotiFreq(curContext, newValueInt).execute();
+							int newIdx = prefNotiFreq.findIndexOfValue(newValueString);
+							String entity = (prefNotiFreq.getEntries()[newIdx]).toString();
+							prefNotiFreq.setSummary(entity);
+							return true;
+						}
+					 });
+		 }
+	}
+
+	
+
+	/* unused change for allow to only show email or not
+	private void setPrefEmail(Preference prefUserEmail, String newUserEmail){
+		if(newUserEmail != null && !newUserEmail.equals(""))
+			prefUserEmail.setSummary(newUserEmail);
+		else
+			prefUserEmail.setSummary(R.string.none);
+	}
+	private void setPrefUserEmail(final Preference prefUserEmail, String userEmail, final Validator validator){
+		if(prefUserEmail != null){
+			 setPrefEmail(prefUserEmail, userEmail);
+			 prefUserEmail.setPersistent(isOnPersistent);
+			 prefUserEmail.setOnPreferenceChangeListener(
+					 new Preference.OnPreferenceChangeListener() {
+						
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+							String newUserEmail = newValue.toString().toLowerCase(Locale.getDefault());
+							if(!validator.isValidEmail(newUserEmail)){
+								new DialogBuilder(curContext).validationError(curContext.getString(R.string.wrong_email) + validator.isValidEmailTextMinAmount());
+							}
+							else{
+								new UploadUserEmail(curContext, newUserEmail).execute();
+								setPrefEmail(prefUserEmail, newUserEmail);
+							}
+							//doesn't save it in android preference (not remember in edittext)
+							return false;
+						}
+					}
+			 ); 
+		 }
+	}
+	*/
+}

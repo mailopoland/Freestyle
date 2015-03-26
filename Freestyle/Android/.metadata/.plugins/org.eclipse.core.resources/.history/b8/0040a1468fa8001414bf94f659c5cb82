@@ -1,0 +1,173 @@
+package freestyle.activities.rhymes;
+
+import android.app.FragmentManager;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.Layout;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
+import com.example.freestyle.R;
+import freestyle.LoginData;
+import freestyle.activities.rhymes.abstracts.IncompletedRhymeActivity;
+import freestyle.data.dto.ChooseWriteSentence;
+import freestyle.data.dto.IncompletedViewRhyme;
+import freestyle.data.dto.ReplyToAccepted;
+import freestyle.data.dto.SentenceToShow;
+import freestyle.data.dto.UserBaseData;
+import freestyle.fragments.AuthorRhymeEditFragment;
+import freestyle.fragments.ReplyChooseViewFragment;
+import freestyle.fragments.ReplyCommunicateViewFragment;
+import freestyle.fragments.UserRhymeViewFragment;
+import freestyle.fragments.clickgenerators.AuthorChooseClickGenerator;
+//activity for author (no person who respond in rhyme)
+public class ChooseWriteSentenceActivity  extends IncompletedRhymeActivity{
+	//true if main data is in bundle
+	private ChooseWriteSentence downObj; 
+	private boolean isInBundle;
+//	private ReplyChooseViewFragment replyChooseFr;
+//	private final View.OnClickListener clickListener = new View.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//        		//MainService service = new MainService(curContext);
+//        		//service.acceptReply(replyChooseFr.getCurId());
+//				ReplyToAccepted replyToAccept = replyChooseFr.curEl;
+//        		AuthorRhymeEditFragment authorEditFr = new AuthorRhymeEditFragment();
+//        		
+//        		//todo prepare the end compatibile with save reply
+//        		//todo toTheEnd prepare
+//        		
+//        		//todo make communicate
+//        		//SentenceCommunicateViewFragment communicateFr = new SentenceCommunicateViewFragment(R.string.write_to_accept);
+//        		
+//        		UserRhymeViewFragment newUserRhymeFr = new UserRhymeViewFragment(replyToAccept.replyTxt, replyToAccept.user);
+//        		fragmentTransaction = fragmentManager.beginTransaction();
+//        		fragmentTransaction.remove(replyChooseFr);
+//        		fragmentTransaction.add(sentencesContainer, newUserRhymeFr);
+//        		fragmentTransaction.commit();
+//        	}
+//    	};
+
+	
+	
+	public ChooseWriteSentenceActivity(){
+	//	curContext = this;
+		baseActivityClassForSlide = ChooseWriteSentenceActivity.class;
+	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+    	//todo idea jest zeby zapisywac rzeczy w saveInstanceState i ich nie pobierac 2 razy
+    	//+ dodac do saveInstState informacje o teksie w edit fieldzie jezeli jest tam takowy
+    	
+    	//altertaywa - to moze po prostu w bundle dawac objekt zeby on tego nie pobieral
+    	//a fragmentom kazac nie znikac
+    	//podejrzewam ze to wymaga zrobienia tego samego dla wszystkich klas (w tym wypadku wazne sa incompl i base)
+    	new DownloadData().execute();
+    	
+    }
+    
+    protected void showInActivity(){
+    	super.showInActivity();
+    	
+	    if( downObj.suggestedReplies == null){
+	    	showNoResponds();
+	    }
+	    //display fragment with list of replies to choose
+	    else{
+	    	String replyChooseFrTag = "replyChooseFrTag";
+	    	AuthorChooseClickGenerator clickGen = new AuthorChooseClickGenerator(this, fragmentManager, 
+	    			sentencesContainer, downObj.rhymeId, replyChooseFrTag, toEndFrTag, this);
+	    	ReplyChooseViewFragment replyChooseFr = new ReplyChooseViewFragment(clickGen, downObj.suggestedReplies);
+	    	fragmentTransaction = fragmentManager.beginTransaction();
+	    	fragmentTransaction.add(sentencesContainer, replyChooseFr, replyChooseFrTag);
+	    	fragmentTransaction.commit();
+//	    	btnNeedAttachClick = true;
+	    }
+    }
+    
+    protected void getDataFromRhymeObj(ChooseWriteSentence obj){
+    	super.getDataFromRhymeObj(obj);
+//    	downObj.suggestedReplies = obj.suggestedReplies;
+    	rhymeAuthor = new UserBaseData();
+		rhymeAuthor.login = LoginData.login;
+		rhymeAuthor.email = LoginData.email;
+    }
+    
+    private void showNoResponds(){
+    	ReplyCommunicateViewFragment fragment = new ReplyCommunicateViewFragment(R.string.no_replies);
+    	fragmentTransaction = fragmentManager.beginTransaction();
+    	fragmentTransaction.add(sentencesContainer, fragment);
+    	fragmentTransaction.commit();
+    }
+
+  //To use the AsyncTask, it must be subclassed  
+    private class DownloadData extends AsyncTask<Void, Void, Boolean>  
+    {  
+    	
+    	
+        //Before running code in separate thread  
+        @Override  
+        protected void onPreExecute()  
+        {  
+        	showProgressDialogDownload();
+        }  
+  
+        //The code to be executed in a background thread.    
+        protected Boolean doInBackground(Void... params)  
+        {       
+        	boolean errorDownload = true;
+        	isInBundle = comingData.getBoolean("isInBundle");
+    	    if( isInBundle ){
+    	    	errorDownload = false;
+    	    	comingData.putBoolean("isInBundle", false);
+    	    	SentenceToShow sent = new SentenceToShow();
+    	        sent.authorTxt = comingData.getString("sentence");
+    	    	
+    	        downObj = new ChooseWriteSentence();
+    	    	downObj.title = comingData.getString("title");
+    	    	downObj.rhymeId = comingData.getString("prevValue"); 
+    	        downObj.sentencesToShow.add(sent);
+    	        downObj.toEnd = comingData.getString("toEnd");
+    	    }
+    	    else{ 
+    	   		//get prevValue and isNext
+    	    	getBasicFromComingData();
+    	    	
+    	    	try {
+					downObj = serviceRhyme().getRhymeAuthorIncomplSortId(LoginData.userKey, prevValue, isNext);
+					errorDownload = false;
+				} catch (Exception e) {
+					errorDownload = true;
+				}
+    	    }
+    	    
+            return errorDownload;  
+        }  
+  
+        //after executing the code in the thread  
+        @Override  
+        protected void onPostExecute(Boolean errorDownload)  
+        {  
+        	closeProgressDialog(); 
+        	if(errorDownload){
+        		dialog().problemWithLogin();
+        	}
+        	else if(downObj != null){
+    	    	getDataFromRhymeObj(downObj);
+    	    	//onPostExecute
+    	        //have to have value there: rhymeId, baseData, rhymeAuthor, curMsgAmount
+    	    	showInActivity();
+    	    }
+    	    else
+    	    	emptyCategory();
+        }  
+    }  
+
+}
+
+

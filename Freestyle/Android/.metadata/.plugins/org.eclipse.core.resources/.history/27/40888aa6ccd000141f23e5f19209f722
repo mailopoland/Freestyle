@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_sentence_comunicate_view_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    style="@style/Sentence_Layout"
+    android:focusable="true"
+	android:focusableInTouchMode="true">
+	
+	   <TextView
+	        android:id="@+id/view_sentence_communicate_text"
+	        style="Rhyme_Text"
+	        android:layout_height="wrap_content"
+	        android:layout_width="match_parent"
+	        android:gravity="center_horizontal"       
+	        android:padding="5dp"
+	        android:layout_marginRight="5dp"
+	        android:layout_marginLeft="5dp"
+	        android:textColor="@color/author_txt" 
+	        >
+	        <!-- if this fragment is used always focus should go on it (or on fragment with is below it) -->
+			<requestFocus />
+	    </TextView>
+</RelativeLayout>

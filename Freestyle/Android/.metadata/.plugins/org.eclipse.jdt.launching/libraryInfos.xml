@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse" version="1.8.0_20">
+<bootpath>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\resources.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\rt.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\sunrsasign.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\jsse.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\jce.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\charsets.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\jfr.jar"/>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\Dokumenty tymczasowo z c\Dokumenty\Studia\Android\Environment\eclipse\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>

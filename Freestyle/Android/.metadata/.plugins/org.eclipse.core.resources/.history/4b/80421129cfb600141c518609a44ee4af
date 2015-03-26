@@ -1,0 +1,134 @@
+package freestyle.fragments;
+
+import android.app.Fragment;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.freestyle.R;
+
+import freestyle.SharedPref;
+import freestyle.helpers.UploadProgressDialog;
+import freestyle.repositories.RepoHandler;
+
+public class FavoriteFragment extends Fragment {
+	
+	private boolean isFavorited;
+	private Context curContext;
+	private String rhymeId;
+	
+	private TextView favIcon;
+//	private TextView favMsg;
+	
+	private final int isFavoriteIconId = R.string.star_full;
+	private final int isNotFavoriteIconId = R.string.star_empty;
+	
+	public FavoriteFragment(boolean isFavorited, Context curContext, String rhymeId){
+		this.isFavorited = isFavorited;
+		this.curContext = curContext;
+		this.rhymeId = rhymeId;
+	}
+	
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+    	
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+        //favMsg = (TextView) view.findViewById(R.id.favorite_msg);
+        favIcon = (TextView) view.findViewById(R.id.favorite_icon);
+        
+        if(favIcon != null){
+        	if(isFavorited)
+            	favIcon.setText(isFavoriteIconId);
+            else
+            	favIcon.setText(isNotFavoriteIconId);
+        	
+        	favIcon.setOnClickListener(new View.OnClickListener() {
+				
+        		private MakeNoFavorite noFav = null;
+        		private MakeFavorite fav = null;
+   
+        		
+				@Override
+				public void onClick(View v) {
+					
+					//remove fav
+					if(isFavorited){
+						isFavorited = false;
+						favIcon.setText(isNotFavoriteIconId);
+						Toast.makeText(curContext, R.string.fav_removing, Toast.LENGTH_SHORT).show();
+						if(noFav == null)
+							noFav = new MakeNoFavorite(curContext);
+						noFav.execute();
+					}
+					//add fav
+					else{
+						isFavorited = true;
+						favIcon.setText(isFavoriteIconId);
+						Toast.makeText(curContext, R.string.fav_adding, Toast.LENGTH_SHORT).show();
+						if(fav == null)
+							fav = new MakeFavorite(curContext);
+						fav.execute();
+					}
+				}
+			});
+        }
+        return view;
+    }
+   
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+    }
+    
+    private class MakeFavorite extends UploadProgressDialog<Void, Void, Boolean>  
+    {
+
+		public MakeFavorite(Context curContext) {
+			super(curContext);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			boolean result = false;
+			String userKey = SharedPref.getMainStr(SharedPref.Keys.USER_KEY, curContext);
+			try {
+				result = new RepoHandler().makeFavorite(userKey, rhymeId);
+			} catch (Exception e) {
+				result = false;
+				e.printStackTrace();
+			}
+			return result;
+		}
+
+
+	}
+    
+    private class MakeNoFavorite extends UploadProgressDialog<Void, Void, Boolean>  
+    {
+    	public MakeNoFavorite(Context curContext) {
+			super(curContext);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			boolean result = false;
+			String userKey = SharedPref.getMainStr(SharedPref.Keys.USER_KEY, curContext);
+			try {
+				result = new RepoHandler().makeNotFavorite(userKey, rhymeId);
+			} catch (Exception e) {
+				result = false;
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+    }
+    
+    
+}

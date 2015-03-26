@@ -1,0 +1,193 @@
+package freestyle.activities;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+
+import com.example.freestyle.R;
+
+import freestyle.Global;
+import freestyle.SharedPref;
+import freestyle.data.app.Pair;
+import freestyle.data.dto.LogInBaseData;
+import freestyle.helpers.DialogBuilder;
+import freestyle.services.MainService;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
+
+public class StartSplashActivity extends Activity {
+
+	//remove in production version
+	private final boolean prepareLoginForTesting = true;
+	
+	private boolean noAccount;
+	private boolean loginFail;
+	private Context curContext;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	
+    	super.onCreate(savedInstanceState);
+    	curContext = this;
+
+    	setContentView(R.layout.activity_start_splash);
+    	
+    	new LoadViewTask().execute();
+        
+    }
+
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//      //  getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//     /*   int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//     */
+//    	return true;
+//    }
+    
+    private boolean logIn(String userName, String password){
+    	MainService service = new MainService();
+    	LogInBaseData user;
+    	try{
+    		user = service.findUser(userName, password);
+    	}
+    	catch(Exception ex){
+    		user = null;
+    	}
+    	return setGlobalUserData(user);
+    }
+    
+    
+    
+    private boolean createAccount(String userName, String password){
+    	MainService service = new MainService();
+    	LogInBaseData user;
+		try {
+			user = service.createUser(userName, password);
+		} catch (Exception e) {
+			user = null;
+		}
+    	return setGlobalUserData(user);
+    }
+    
+    private boolean setGlobalUserData(LogInBaseData user){
+    	boolean result = false;
+    	if(user != null && user.id != null && user.id.length() > 0){
+    		Global.test = "dupa";
+    		SharedPref.setMain(SharedPref.Keys.USER_KEY, user.id, this);
+    		SharedPref.setMain(SharedPref.Keys.USER_LOGIN, user.login, this);
+    		SharedPref.setMain(SharedPref.Keys.USER_EMAIL, user.email, this);
+    		result = true;
+    	}
+    	return result;
+    }
+    
+    private Pair<String> getLoginAndPass(){
+    	Pair<String> result = null;
+    	String login = this.getGmailLogin();
+    	if(login != null){
+	    	String pass = this.codePass(login);
+	    	result = new Pair<String>(login, pass);
+    	}
+    	return result;
+    }
+    
+    private String getGmailLogin(){
+    	
+    	AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+    	Account[] list = manager.getAccounts();
+    	String gmail = null;
+
+    	for(Account account: list)
+    	{
+    	    if(account.type.equalsIgnoreCase("com.google"))
+    	    {
+    	        gmail = account.name;
+    	        break;
+    	    }
+    	}
+    	return gmail;
+    }
+    private String codePass(String input){
+    	String firstChange = input.substring(input.length() / 2 + 1, input.length() - 1) + input.substring(0, input.length() / 2);
+    	return Integer.toString(firstChange.hashCode());
+    }
+    
+    private class LoadViewTask extends AsyncTask<Void, Void, Void>  
+    {  
+    	/*
+        //Before running code in separate thread  
+        @Override  
+        protected void onPreExecute()  
+        {  
+        	
+        }  
+  */
+        //The code to be executed in a background thread.  
+        @Override  
+        protected Void doInBackground(Void... params)  
+        {       	    
+        	Pair<String> loginAndPass = getLoginAndPass();
+        	if(loginAndPass != null){
+        		noAccount = false;
+    	    	String userLogin = loginAndPass.first();
+    	    	String userPassword = loginAndPass.second();
+    	    	
+    	    	if(prepareLoginForTesting)
+    	    	{
+	    	    	//cheating for presentation todo remove it
+	    	    	userLogin = "test12login";
+	    	    	userPassword = "test12pass";
+    	    	}
+    	    	if(logIn( userLogin, userPassword ) || createAccount( userLogin, userPassword ))
+    	    	{
+    	    		loginFail = false;
+    	    		Intent intent = new Intent(StartSplashActivity.this, MainMenuActivity.class);
+                	startActivity(intent);
+                	finish();
+    	    	}
+    	    	else
+        			loginFail = true;
+        	}
+        	else
+        		noAccount = true;
+            return null;  
+        }  
+
+        //after executing the code in the thread checking that is no error
+        @Override  
+        protected void onPostExecute(Void result)  
+        {  
+        	if(noAccount){
+        		new DialogBuilder(curContext).noAccount();
+        	}
+        	else if(loginFail){
+        		new DialogBuilder(curContext).problemWithLogin();
+        	}
+        }
+ 
+    }  
+
+}

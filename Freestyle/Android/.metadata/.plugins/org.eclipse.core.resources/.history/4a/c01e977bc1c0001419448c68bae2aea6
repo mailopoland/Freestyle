@@ -1,0 +1,193 @@
+package freestyle.activities;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+
+import com.example.freestyle.R;
+
+import freestyle.Global;
+import freestyle.SharedPref;
+import freestyle.adapters.LogAdp;
+import freestyle.data.app.Pair;
+import freestyle.data.dto.LogInBaseData;
+import freestyle.helpers.DialogBuilder;
+import freestyle.helpers.outin.AsyncGen;
+import freestyle.repositories.RepoHandler;
+import freestyle.services.Schedule;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
+
+public class StartSplashActivity extends Activity {
+
+	//remove in production version
+	private final boolean prepareLoginForTesting 
+		= true;
+		//= false;
+	
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	
+    	super.onCreate(savedInstanceState);
+    	setContentView(R.layout.activity_start_splash);
+    	new LoadViewTask(this).execute();
+        
+    }
+    
+    private class LoadViewTask extends AsyncGen<Void, Void, Void>  
+    {      	
+    	private boolean noAccount;
+    	private boolean loginFail;
+    	private final String curVersion;
+    	
+        public LoadViewTask(Context curContext) {
+			super(curContext);
+			curVersion = getAppNameVersion();
+		}
+
+		@Override  
+        protected Void doInBackground(Void... params)  
+        {       
+        	Pair<String,String> loginAndPass = getLoginAndPass();
+        	if(loginAndPass != null){
+        		noAccount = false;
+    	    	String userLogin = loginAndPass.first();
+    	    	String userPassword = loginAndPass.second();
+    	    	
+    	    	if(prepareLoginForTesting)
+    	    	{
+	    	    	//cheating for presentation todo remove it
+	    	    	userLogin = "test12login";
+	    	    	userPassword = "test12pass";
+    	    	}
+    	    	if(logIn( userLogin, userPassword ) || createAccount( userLogin, userPassword ))
+    	    	{
+    	    		loginFail = false;
+    	    		Intent intent = new Intent(StartSplashActivity.this, MainMenuActivity.class);
+                	startActivity(intent);
+                	finish();
+    	    	}
+    	    	else
+        			loginFail = true;
+        	}
+        	else
+        		noAccount = true;
+            return null;  
+        }  
+
+        //after executing the code in the thread checking that is no error
+        @Override  
+        protected void replaceOnPostExecute(Void output) 
+        {  
+        	if(noAccount){
+        		new DialogBuilder(StartSplashActivity.this).noAccount();
+        	}
+        	else if(loginFail){
+        		new DialogBuilder(StartSplashActivity.this).problemWithLogin();
+        	}
+        }
+        
+        private boolean createAccount(String userName, String password){
+        	RepoHandler service = getRepoHandler();
+        	LogInBaseData user;
+    		try {
+    			user = service.createUser(userName, password, curVersion);
+    		} catch (Exception e) {
+    			user = null;
+    			LogAdp.e(getClass(), "createAccount", "during create account", e);
+    		}
+        	return setGlobalUserData(user);
+        }
+        
+        private boolean logIn(String userName, String password){	
+        	RepoHandler service = getRepoHandler();
+        	LogInBaseData user;
+        	try{
+        		user = service.findUser(userName, password, curVersion);
+        	}
+        	catch(Exception e){
+        		user = null;
+        		LogAdp.e(getClass(), "logIn", "during log in", e);
+        	}
+        	return setGlobalUserData(user);
+        }
+        
+        private boolean setGlobalUserData(LogInBaseData user){
+        	boolean result = false;
+        	if(user != null && user.id != null && user.id.length() > 0){
+        		SharedPref.setMain(SharedPref.Keys.USER_KEY, user.id + curVersion, curContext);
+        		SharedPref.setMain(SharedPref.Keys.USER_LOGIN, user.login, curContext);
+        		SharedPref.setMain(SharedPref.Keys.USER_EMAIL, user.email, curContext);
+        		SharedPref.setMain(SharedPref.Keys.NO_ACCEPT_NOTI, user.noAcceptNoti, curContext);
+        		SharedPref.setMain(SharedPref.Keys.NO_RESP_NOTI, user.noRespNoti, curContext);
+        		SharedPref.setMain(SharedPref.Keys.NOTI_FREQ, user.notiFreq, curContext);
+        		//run if this app is started first time, or on other device user set on noti
+        		//cancel is not necessery because it is cancel automatic (during get noti in service)
+        		if(!user.noAcceptNoti || !user.noAcceptNoti)
+        			new Schedule(curContext).run();
+        		result = true;
+        	}
+        	return result;
+        }
+        
+        private Pair<String,String> getLoginAndPass(){
+        	Pair<String,String> result = null;
+        	String login = this.getGmailLogin();
+        	if(login != null){
+    	    	String pass = this.codePass(login);
+    	    	result = new Pair<String,String>(login, pass);
+        	}
+        	return result;
+        }
+        
+        private String getGmailLogin(){
+        	
+        	AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        	Account[] list = manager.getAccounts();
+        	String gmail = null;
+
+        	for(Account account: list)
+        	{
+        	    if(account.type.equalsIgnoreCase("com.google"))
+        	    {
+        	        gmail = account.name;
+        	        break;
+        	    }
+        	}
+        	return gmail;
+        }
+        private String codePass(String input){
+        	String firstChange = input.substring(input.length() / 2 + 1, input.length() - 1) + input.substring(0, input.length() / 2);
+        	return Integer.toString(firstChange.hashCode());
+        }
+        
+        private String getAppNameVersion(){
+        	String version = null;
+    		try {
+    			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+    			version = pInfo.versionName;
+    			if(version != null)
+    				version = version.replace('.', ',');
+    			else
+    				throw new NameNotFoundException("versionName is null");
+    		} catch (NameNotFoundException e) {
+    			LogAdp.wtf(getClass(), "getAppCodeVersion", "during get app code version", e);
+    			version = String.valueOf(Global.defWrongVer);
+    		}
+    		return Global.verTag + version;
+        }
+    }  
+
+}

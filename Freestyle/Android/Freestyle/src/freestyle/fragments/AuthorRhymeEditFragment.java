@@ -1,0 +1,183 @@
+package freestyle.fragments;
+
+import org.json.JSONException;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.mailoskyteam.freestyle.R;
+
+import freestyle.adapters.LogAdp;
+import freestyle.data.app.BundleEnum;
+import freestyle.data.dto.todb.RhymeWithSenToSave;
+import freestyle.helpers.Validator;
+import freestyle.helpers.json.JsonConsumer;
+import freestyle.helpers.json.JsonCreator;
+import freestyle.helpers.outin.uploaders.UploaderToast;
+
+
+
+public class AuthorRhymeEditFragment extends BaseFragment {
+	
+	private EditText sentenceEditText;
+	//is possible that activity implement click btn action (true)
+	private boolean useOwnClickGen;
+	
+	//set via bundle input
+	private RhymeWithSenToSave rhymeToSave;
+	private int sentencesContainer;
+	private String otherOptFrTag;
+	private String communicateFrTag;
+	private String toEndFrTag;
+	
+	//bundle keys:
+	private String rhymeWithSenToSaveJsonKeyB = BundleEnum.RHYME_WITH_SEN_TO_SAVE_JSON.toString();
+	private String sentencesContainerJsonKeyB = BundleEnum.SENTENCES_CONTAINER.toString();
+	private String otherOptFrTagKeyB = BundleEnum.OTHER_OPT_FR_TAG.toString();
+	private String communicateFrTagKeyB = BundleEnum.COMMUNICATE_FR_TAG.toString();
+	private String toEndFrTagKeyB = BundleEnum.TO_END_FR_TAG.toString();
+	
+	//method for set arguments (before the Fragment is attached to the Activity)
+	public void setArguments(
+			final String replyCommunicateViewFragmentTag,
+			final String rhymeEnderFrTag,
+			RhymeWithSenToSave toUpdateRhyme, int sentencesContainer, final String toEndFrTag) {
+		Bundle frInput = new Bundle(5);
+		String toUpdateRhymeJson;
+		try {
+			toUpdateRhymeJson = new JsonCreator().createRhymeWithSenToSave(toUpdateRhyme);
+		} catch (JSONException e) {
+			toUpdateRhymeJson = null;
+			LogAdp.e(this.getClass(), "during create json object (string)", e.toString(), e);
+		}
+		frInput.putString(rhymeWithSenToSaveJsonKeyB, toUpdateRhymeJson);
+		frInput.putInt(sentencesContainerJsonKeyB, sentencesContainer);
+		frInput.putString(otherOptFrTagKeyB, rhymeEnderFrTag);
+		frInput.putString(communicateFrTagKeyB, replyCommunicateViewFragmentTag);
+		frInput.putString(toEndFrTagKeyB, toEndFrTag);
+		this.setArguments(frInput);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(frArgs != null){
+        	useOwnClickGen = true;
+        	
+        	JsonConsumer jsCons = new JsonConsumer();
+        	String rhymeWithSenToSaveJsStr = frArgs.getString(rhymeWithSenToSaveJsonKeyB);
+        	this.rhymeToSave = jsCons.getRhymeWithSenToSave(rhymeWithSenToSaveJsStr);
+        	this.sentencesContainer = frArgs.getInt(sentencesContainerJsonKeyB);
+        	this.otherOptFrTag = frArgs.getString(otherOptFrTagKeyB);
+        	this.communicateFrTag = frArgs.getString(communicateFrTagKeyB);
+        	this.toEndFrTag = frArgs.getString(toEndFrTagKeyB);
+        }
+        else
+        	useOwnClickGen = false;
+	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+    	 View result = inflater.inflate(R.layout.fragment_author_rhyme_edit, container, false);
+    	 if(useOwnClickGen){
+	    	 Button acceptBtn = (Button) result.findViewById(R.id.accept_button);
+	    	 this.sentenceEditText = (EditText) result.findViewById(R.id.edit_author_sentence_text);
+	    	 if(acceptBtn != null)
+	    		 acceptBtn.setOnClickListener( genListener() );
+    	 }
+    	 return result;
+    }
+    
+    public OnClickListener genListener() {
+		View.OnClickListener result = null;
+		
+		if(sentenceEditText != null)
+			result = new OnClickListener() {
+	
+				@Override
+				public void onClick(View v) {
+						boolean isVaild = true;
+						Activity curActivity = AuthorRhymeEditFragment.this.getActivity();
+						rhymeToSave.sentence = sentenceEditText.getText().toString();
+						Validator validator = new Validator(curActivity);
+						if(!validator.isValidShortText(rhymeToSave.sentence)){
+			        		sentenceEditText.setError(curActivity.getString(R.string.min_lenght) + validator.isValidShortTextMinAmount());
+			        		isVaild = false;
+			        	}
+						if(isVaild)
+						{
+							correctDataClickAction(curActivity);
+						}
+					}
+
+				private void correctDataClickAction(Activity curActivity) {
+					new UploadData(curActivity, R.string.new_sentences,
+							R.string.new_sentences_suc, R.string.new_sentences_fail).execute();
+					fixKeypadBug(curActivity);
+					//delete
+					FragmentManager fragmentManager = curActivity.getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+					Fragment rhymeEnderFr =  fragmentManager.findFragmentByTag(otherOptFrTag);
+					Fragment communicateFr = fragmentManager.findFragmentByTag(communicateFrTag);
+					ToEndFragment toEndFr = (ToEndFragment)fragmentManager.findFragmentByTag(toEndFrTag);
+					//Fragment authorEditorFr = fragmentManager.findFragmentByTag(otherOptFrTag);
+					if(rhymeEnderFr != null)
+						fragmentTransaction.remove(rhymeEnderFr);
+					if(communicateFr != null)
+						fragmentTransaction.remove(communicateFr);
+					fragmentTransaction.remove(AuthorRhymeEditFragment.this);
+					if(toEndFr != null)
+						toEndFr.newSentenceAdd();
+					//add
+					AuthorRhymeViewFragment viewSentenceFr = new AuthorRhymeViewFragment();
+					Bundle inputFr = new Bundle();
+					inputFr.putString(BundleEnum.SENTENCE.toString(), rhymeToSave.sentence);
+					viewSentenceFr.setArguments(inputFr);
+					fragmentTransaction.add(sentencesContainer, viewSentenceFr);
+					fragmentTransaction.commit();
+					
+					//in other transaction because when it was added in above one it was displayed above viewSentenceFr
+					//I don't know why (sth like a bug?)
+					fragmentTransaction = fragmentManager.beginTransaction();
+					ReplyCommunicateFragment noRespondComFr = new ReplyCommunicateFragment();
+					noRespondComFr.setArguments(R.string.no_replies);
+					fragmentTransaction.add(sentencesContainer, noRespondComFr);
+					fragmentTransaction.commit();
+				}
+				
+				//fix bug - hide virtual keypad after add respond (delete edit field)
+				private void fixKeypadBug(Activity curActivity) {
+					InputMethodManager imm = (InputMethodManager) curActivity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(curActivity.getCurrentFocus().getWindowToken() ,  0);
+				}
+			};
+		return result;
+	}
+    
+    private class UploadData extends UploaderToast{
+
+		public UploadData(Context curContext, int startMsgId, int endMsgSucId,
+				int endMsgFailId) {
+			super(curContext, startMsgId, endMsgSucId, endMsgFailId);
+		}
+
+		@Override
+		protected Boolean uploadMethod(String userKey) throws Exception {
+			return getRepoHandler().addSentence(rhymeToSave);
+		}
+
+
+	}
+}

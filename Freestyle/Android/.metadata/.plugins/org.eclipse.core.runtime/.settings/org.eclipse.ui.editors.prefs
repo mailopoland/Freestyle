@@ -1,0 +1,7 @@
+AbstractTextEditor.Accessibility.UseCustomCarets=false
+AbstractTextEditor.Navigation.SmartHomeEnd=false
+eclipse.preferences.version=1
+hyperlinksEnabled=false
+lineNumberRuler=true
+overviewRuler_migration=migrated_3.1
+spellingEngine=org.eclipse.jdt.internal.ui.text.spelling.DefaultSpellingEngine

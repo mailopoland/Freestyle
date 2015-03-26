@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Freestyle</string>
+    <string name="title">Tytuł</string>
+    <!-- empty because label is create form code (empty prevent flashing) -->
+    <string name="label"></string>
+    
+    <!-- Simple and universal -->
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="or">lub</string>
+    <string name="none">Brak</string>
+    <string name="three_dots">&#8230;</string>
+    <string name="hello">Cześć</string>
+    <string name="prev">Poprzedni</string>
+    <string name="next">Następny</string>
+    <string name="default_txt">domyślnie</string>
+    
+    <!-- Buttons -->
+    <string name="decline">X if you want to use change to image icon</string>
+    
+    <!-- Login -->
+    <string name="choose_account_title">Wybierz konto za pomocą, którego chcesz się logować</string>
+    
+	<!-- Main menu -->
+    <string name="my_rhymes">Moje rymy</string> 
+    <string name="completed_rhymes">Ukończone rymy</string>
+    <string name="top_rhymes">Najlepiej oceniane</string>
+    <string name="favorite_rhymes">Ulubione</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="action_help">Pomoc</string>
+	
+    <!-- My Rhymes Menu -->
+    <string name="new_rhyme">Zacznij nowy</string>
+    <string name="continue_my">Kontynuuj moje nieukończone</string>
+    <string name="reply_by_rhyme">Odpowiedz rymem innym</string>  
+    <string name="your_rhymes">Moje ukończone</string>
+    <string name="with_yours_rhymes">Z moimi przyjętymi wersami</string>
+    
+    <!-- Base kind of rhymes -->
+    <string name="incomplete">Nieukończone</string>
+	<string name="complete">Ukończone</string>
+	
+    <!-- My Uncompleted Rhymes Menu -->
+    <string name="choose_reply">Wybierz odpowiedź</string>
+    <string name="write_sentence">Napisz kolejny wers</string>
+    
+    <!-- Base rhyme -->
+    <string name="empty_category">Pusta kategoria</string>
+    <string name="no_next">Brak następnych</string>
+    <string name="no_prev">Brak poprzednich</string>
+
+    <!-- Author rhyme -->
+    <string name="hint_author_sentence">Wpisz wers bez rymu</string>
+    <string name="write_to_accept">Wpisz kolejny wers bez rymu aby zaakceptować odpowiedź</string>
+    <string name="do_action_to_save">Wykonaj akcje aby zapisać wybór:</string>
+    <string name="or_click_to_finish">lub KLIKNIJ aby zakończyć</string>
+    <string name="click_to_finish">KLIKNIJ aby zakończyć</string>
+    <string name="are_you_sure_finish">Czy na pewno chcesz zakończyć całą rymowanke?</string>
+    
+    <!-- Reply rhyme -->
+    <string name="hint_reply_rhyme">Wers rymujący się z poprzednim</string>
+    <string name="no_replies">Brak odpowiedzi</string>
+    <string name="reply_waiting">Twoja odpowiedź czeka na akceptacje</string>
+    
+	<!-- RhymeView -->
+    <string name="author" tools:ignore="Typos">Autor:</string>
+    
+    <!-- Notification -->
+    <string name="resp_noti_title" tools:ignore="Typos">Nowe odpowiedzi</string>
+    <string name="resp_noti_description">na twoje rymy</string>
+    <string name="resp_noti_text">Dotknij, aby zobaczyć</string>
+    <string name="accept_noti_title" tools:ignore="Typos">Zaakceptowano</string>
+    <string name="accept_noti_description">odpowiedzi udzielone przez Ciebie</string>
+    <string name="accept_noti_text">Dotknij, aby zobaczyć</string>
+    <string name="need_new_ver_title">Nieaktualna wersja</string>
+    <string name="need_new_ver_text">Zaaktualizuj, aby móc korzystać z aplikacji</string>
+    
+    <!-- Toast msg -->
+    <string name="try_again">Załaduj ponownie i spróbuj jeszcze raz</string>
+    <string name="fav_adding">Dodawanie do ulubionych</string>
+    <string name="fav_adding_suc">Dodano do ulubionych</string>
+    <string name="fav_adding_fail">Błąd przy dodawaniu do ulubionych</string>
+    <string name="fav_removing">Usuwanie z ulubionych</string>
+    <string name="fav_removing_suc">Usunięto z ulubionych</string>
+    <string name="fav_removing_fail">Błąd przy usuwaniu z ulubionych</string>
+    <string name="new_sentences">Dodawanie nowych zdań</string>
+    <string name="new_sentences_suc" tools:ignore="Typos">Dodano nowe zdania</string>
+    <string name="new_sentences_fail">Błąd przy dodawaniu nowych zdań</string>
+    <string name="finish_rhyme">Całkowite kończenie rymu</string>
+    <string name="finish_rhyme_suc">Zakończono rym</string>
+    <string name="finish_rhyme_fail">Błąd przy zakańczaniu rymu</string>
+    <string name="new_resp">Dodawanie nowej odpowiedzi</string>
+    <string name="new_resp_suc">Dodano nową odpowiedź</string>
+    <string name="new_resp_fail">Błąd przy dodawaniu nowej odpowiedzi</string>
+    <string name="new_vote">Dodawnie głosu</string>
+    <string name="new_vote_suc">Dodano głos</string>
+    <string name="new_vote_fail">Błąd przy dodawaniu głosu</string>
+    
+    <!-- Sort toast msg -->
+    <string name="sort_by">Sortowane według\n</string>
+    <string name="newest_sug_rep">najnowszej sugerowanej odpowiedzi</string>
+    <string name="newest_create_date">daty utworzenia</string>
+    <string name="newest_last_sentence">najnowszego ostatniego zdania</string>
+    <string name="newest_finish_date">daty zakończenia</string>
+    <string name="higest_vote_value">najwyszej oceny</string>
+    
+    <!-- Settings -->
+    <string name="menu_settings">Ustawienia</string>
+    <string name="pref_user_profile">Profil użytkownika</string>
+    <string name="pref_notification">Powiadomienia</string>
+    <string name="pref_notification_summary">Powiadomienia pobierają i wyświetlają się tylko wtedy gdy jest włączona synchronizacja w ustawieniach urządzenia</string>
+    <string name="pref_user_name">Nazwa użytkownika</string>
+    <string name="pref_change_user_name">Zmień nazwę użytkownika</string>
+    <string name="pref_new_user_name">Nowa nazwa użytkownika</string>
+    <string name="pref_user_email">E-mail</string>
+    <string name="pref_new_user_email" tools:ignore="Typos">Nowy adres e-mail</string>
+    <string name="pref_change_user_email" tools:ignore="Typos">Zmień wyświetlany e-mail</string>
+	<string name="pref_show_user_email" tools:ignore="Typos">Wyświetlaj adres e-mail</string>
+    <string name="pref_account">Ustawienia konta</string>
+    <string name="pref_change_account">Zmień konto google</string>
+    <string name="pref_change_account_info" tools:ignore="Typos">Z wybranym kontem są powiązane min. twoje rymy, ulubione, ustawienia, adres email</string>
+    
+    <string name="pref_noti_accept">Akceptacje odpowiedzi</string>
+    <string name="pref_noti_accept_summary">Informuj o zaakceptowaniu twoich odpowiedzi</string>
+    
+    <string name="pref_noti_resp" tools:ignore="Typos">Nowe odpowiedzi</string> 
+    <string name="pref_noti_resp_summary">Informuj o pojawieniu się nowych odpowiedzi w twoich rymach</string>
+    
+    <string name="pref_active">Aktywne</string>
+    <string name="pref_inactive">Nieaktywne</string>
+    
+    <string name="pref_noti_freq">Częstotliwość sprawdzania</string>
+    
+    <string name="pref_key_user_name">pref_key_user_name</string>
+    <string name="pref_key_user_email">pref_key_user_email</string>
+    <string name="pref_key_show_email">pref_key_show_email</string>
+    <string name="pref_key_change_account">pref_key_change_account</string>
+    <string name="pref_key_noti_accept">pref_key_noti_accept</string>
+    <string name="pref_key_noti_resp">pref_key_noti_resp</string>
+    <string name="pref_key_noti_freq">pref_key_noti_freq</string>
+    <string name="pref_share_pref_main">com.example.freestyle.preference_main_file_key</string>
+    
+    
+    <!--  Standard msg -->
+    <string name="login_to_srv">Logowanie do serwera&#8230;</string>
+    <string name="please_waiting">Proszę czekać</string>
+    <string name="download_and_load">Pobieranie i ładowanie danych z serwera&#8230;</string>
+    <string name="sending_data">Wysyłanie danych na serwer&#8230;</string>
+    <string name="confirm_decision">Potwierdź decyzję</string>
+    
+    <!-- Send email msg -->
+    <string name="send_email">Wyślij e-mail</string>
+    <string name="do_you_want_send_to">Czy chcesz wysłać wiadomość do użytkownika </string>
+    <string name="choose_email_client">Wybierz klienta pocztowego:</string>
+    <string name="no_email_client">Nie można wysłać wiadomości.\nBrak zainstalowanych klientów pocztowych.</string>
+    
+    <!-- Validation msg -->
+    <string name="min_lenght">Minimalna długość: </string>
+    <string name="wrong_email">Wymagny poprawny format i minimalna długość: </string>
+    <string name="empty_to_remove">Aby usunąć wyślij pusty</string>
+    
+    <!-- Error msg -->
+    <string name="error_name">Błąd: </string>
+    <string name="error_no_gmail_title">Nie znaleziono konta google</string>
+    <string name="error_no_gmail_txt">Musisz posiadać skonfigurowane na telefonie konto google aby korzystać z applikacji.</string>
+    <string name="error_server_connect_title">Problem z zalogowaniem do serwera</string>
+    <string name="error_server_connect_txt">Sprawdz połączenie z internetem i spróbuj ponownie.</string>
+    <string name="error_custom_title">Nieoczekiwany błąd aplikacji.</string>
+    <string name="error_internal_try_again">Wewnętrzny błąd. Spróbuj ponownie.</string>
+    <string name="wrong_data">Niepoprawne dane</string>
+    <string name="error_settings_custom_title">Błąd</string>
+    <string name="error_settings_change">Wewnętrzny problem aplikacji podczas zmiany ustawień. Spróbuj jeszcze raz.</string>
+    <string name="error_settings_login_exsist">Wybrana nazwa użytkownika jest zajęta. Wybierz inną.</string>
+    <string name="error_settings_email_exsist" tools:ignore="Typos">Wybrany e-mail jest już w użyciu. Sprawdź wybrany adres, jeżeli nie używa go inne Twoje konto i podejrzewasz nadużycie skontaktuj się z nami.</string>
+    <string name="error_wrong_client_ver_title">Nieaktualna wersja aplikacji</string>
+    <string name="error_wrong_client_ver_text">Aby móc korzystać z aplikacji musisz ją zaaktualizować</string>
+    <string name="error_cur_account_is_delete_title">Usunięto aktualnie używane konto</string>
+    <string name="error_cur_account_is_delete_text">Wykryto usunięcie aktualnie używanego w aplikacji konta google.\nNastąpi przejście do ekranu wyboru konta.</string>
+    
+    
+    <!-- Help -->
+    <string name="general_help">
+        <![CDATA[ <b>Twórz swoje własne rymowane utwory.</b><br>
+        Dodaj pierwsze zdanie, poczekaj na reakcje innych i wybierz najlepszą rymującą się odpowiedź.
+        Powtarzaj cykl póki nie osiągniesz minimalnej ilości wersów. Od teraz dostępna będzie opcja zakończenia rymowanki. 
+        Możesz też bawić się dalej aż do utworzenia maksymalnej ilości zdań.<br><br>
+        <b>Odpowiedz innym.</b><br>
+        Stań po drugiej stronie i odpowiadaj rymem na rozpoczęte przez innych utwory. 
+        Przekonaj pomysłową odpowiedzią autora do akceptacji twojego wersu.<br><br>
+        <b>Niech zadecyduje lud.</b><br>
+        Zakończone rymowane utwory są dostępne do oceny dla ciebie i innych. Sprawdź co potrafi stworzyć tak niecodzienna kolaboracja! ]]>
+    </string>
+</resources>

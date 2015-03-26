@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_user_rhyme_edit_layout"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:background="@color/red_dark"
+    android:baselineAligned="false">
+
+	    <EditText
+	        style="@style/Sentence_Edit_Text"
+	        android:id="@+id/edit_user_sentence_text"
+	        android:hint="@string/hint_reply_rhyme"
+	        android:textColor="@color/red_light"
+        	android:textColorHint="@color/red_medium"
+        	android:background="@drawable/edit_text_user"
+        	android:inputType="textShortMessage|textMultiLine"
+        	android:layout_marginLeft="25dp"
+        >
+	    </EditText>
+		<include 
+		    style="@style/Sentence_Button_Fragment"
+		    layout="@layout/button_accept_user"
+		/>
+</LinearLayout>

@@ -1,0 +1,364 @@
+package freestyle.activities.rhymes.abstracts;
+
+
+import java.util.Iterator;
+
+import com.example.freestyle.R;
+
+import android.annotation.SuppressLint;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.GridLayout.Spec;
+import freestyle.LoginData;
+import freestyle.activities.AppMenuActivity;
+import freestyle.data.app.TypeRhymeEnum;
+import freestyle.data.dto.BaseViewRhyme;
+import freestyle.data.dto.SentenceToShow;
+import freestyle.data.dto.UserBaseData;
+import freestyle.fragments.AuthorRhymeViewFragment;
+import freestyle.fragments.FavoriteFragment;
+import freestyle.fragments.SentenceCommunicateViewFragment;
+import freestyle.fragments.UserRhymeViewFragment;
+import freestyle.helpers.DialogBuilder;
+import freestyle.services.MainService;
+
+public abstract class BaseViewRhymeActivity extends AppMenuActivity  {
+	
+	
+	//tell us what is base activity with we should use for get next rhyme (slide left/right)
+	protected Class<?> baseActivityClassForSlide;
+	private final Context curContext = this;
+	
+	
+	//data pass via the same activity
+	//for nav (slide left/right)
+	protected boolean isNext;
+	//for nav (slide left/right)
+	protected String prevValue;
+	protected String prevSpecValue;
+	protected TypeRhymeEnum typeRhyme;
+
+	//universal base data
+	protected UserBaseData rhymeAuthor;
+	
+	//For create objects in views 
+	//START
+	protected final FragmentManager fragmentManager = getFragmentManager();
+	protected FragmentTransaction fragmentTransaction;
+	protected Bundle comingData;
+	protected MainService serviceRhyme(){
+		return new MainService();
+	}
+	protected DialogBuilder dialog(){
+		return new DialogBuilder(curContext);
+	}
+	protected final int sentencesContainer = R.id.sentences_rhymes_container;
+	protected final int additionalInfoContainer = R.id.additional_info_container;
+
+	private TextView titleTextView;
+	private TextView authorNameView;
+	private TextView authorEmailView;
+	private ScrollView layout;
+	private ProgressDialog progressDialog; 
+	
+	//For create objects in views
+	//END
+	
+	//universal base data
+	private BaseViewRhyme baseData = new BaseViewRhyme();
+	
+	//move detector
+	private GestureDetector gestureDetector;// = new GestureDetector(new GestureListener());
+
+	public BaseViewRhymeActivity(){
+		//activity null in non deprecated version?
+		this.gestureDetector = new GestureDetector(getBaseContext(), new GestureListener());
+	}
+	
+
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+       // new LoadViewTask().execute();
+        comingData = getIntent().getExtras();
+        setContentView(R.layout.activity_rhyme_base_view);
+        
+        //showTitleAuthorAndSentences();
+        
+        layout = (ScrollView) findViewById(R.id.main_container);
+        //fix bug with auto scroll when scroll contain focusable els
+        layout.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        layout.setFocusable(true);
+        layout.setFocusableInTouchMode(true);
+        //end fix + arg0.requestFocusFromTouch() (this meth do switch l/r too) in onTouch below
+        layout.setOnTouchListener(new View.OnTouchListener(){
+        	
+        	@SuppressLint("ClickableViewAccessibility") 
+        	@Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+        		arg0.requestFocusFromTouch();
+                //gesture detector to detect swipe.
+                gestureDetector.onTouchEvent(arg1);
+                //always return false to not consume event
+                return false;
+            }
+        });
+   	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle state) {
+	    super.onSaveInstanceState(state);    
+	    state.putString("baseData.title", baseData.title);
+	    state.putString("baseData.rhymeId", baseData.rhymeId);
+	    
+	    //for slide
+	    state.putString("isNext", String.valueOf(isNext));
+		state.putString("prevValue", prevValue);
+		state.putString("prevSpecValue", prevSpecValue);
+		if(typeRhyme != null)
+	    	state.putString("typeRhyme", typeRhyme.toString());
+		//end for slide
+	    if(rhymeAuthor != null){
+	    	state.putString("rhymeAuthor.login", rhymeAuthor.login);
+	    	state.putString("rhymeAuthor.email", rhymeAuthor.email);
+	    }
+	    
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	    super.onRestoreInstanceState(savedInstanceState);
+	    baseData = new BaseViewRhyme();
+	    rhymeAuthor = new UserBaseData();
+	    baseData.title = savedInstanceState.getString("baseData.title");
+	    baseData.rhymeId = savedInstanceState.getString("baseData.rhymeId");
+		    	
+	    rhymeAuthor.login = savedInstanceState.getString("rhymeAuthor.login");
+	    rhymeAuthor.email = savedInstanceState.getString("rhymeAuthor.email");
+	    showTitleAndAuthor();
+	}
+
+	protected void showProgressDialogDownload(){
+		progressDialog = new ProgressDialog(curContext, ProgressDialog.THEME_HOLO_DARK);
+		progressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_DARK);
+		progressDialog.setTitle(R.string.please_waiting);
+		progressDialog.setMessage(this.getString(R.string.download_and_load));
+		progressDialog.show();
+	}
+	
+	//todo remove? (moved to onClickGenerators
+	protected void showProgressDialogUpload(){
+		progressDialog = new ProgressDialog(curContext, ProgressDialog.THEME_HOLO_DARK);
+		progressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_DARK);
+		progressDialog.setTitle(R.string.please_waiting);
+		progressDialog.setMessage(this.getString(R.string.sending_data));
+		progressDialog.show();
+	}
+	
+	protected void closeProgressDialog(){
+		if(progressDialog != null && progressDialog.isShowing())
+			progressDialog.dismiss();
+	}
+	//helper for slide (browser) rhymes
+	//get information about prev to get current in new activity (after slide)
+	public void getBasicFromComingData(){
+		getBasicFromComingData(comingData);
+	}
+	
+	private void getBasicFromComingData(Bundle data){
+		isNext = data.getBoolean("isNext");
+    	prevValue = data.getString("prevValue");
+    	prevSpecValue = data.getString("prevSpecValue");
+    	String typeRhymeString = data.getString("typeRhyme");
+    	if(typeRhymeString != null && !typeRhymeString.isEmpty())
+    		typeRhyme = TypeRhymeEnum.valueOf(typeRhymeString);
+    	else
+    		typeRhyme = null;
+	}
+	
+	//overload by children classes for get all data of downloaded obj 
+	//first it is executed from them
+	protected void getDataFromRhymeObj(BaseViewRhyme obj){
+		baseData.rhymeId = obj.rhymeId;
+		baseData.curValue = obj.curValue;
+    	baseData.sentencesToShow = obj.sentencesToShow;
+    	baseData.title = obj.title;
+    	baseData.isFavorited = obj.isFavorited;
+	}
+	
+	protected void showInActivity(){
+		showTitleAndAuthor();
+		showSentences();
+		if(rhymeAuthor != null && !LoginData.login.equals(rhymeAuthor.login))
+			showFavorite();
+			
+    }
+	
+	protected void emptyCategory(){
+		SentenceCommunicateViewFragment communicateFr = new SentenceCommunicateViewFragment(R.string.empty_category);
+		fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.add(sentencesContainer, communicateFr);
+		fragmentTransaction.commit();
+	}
+	
+	private void showFavorite(){
+		FavoriteFragment favFr = new FavoriteFragment(baseData.isFavorited, curContext, baseData.rhymeId);
+		fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.add(additionalInfoContainer, favFr);
+		fragmentTransaction.commit();
+	}
+	
+
+	private void showTitleAndAuthor(){
+		titleTextView = (TextView) findViewById(R.id.title_view);
+        authorNameView = (TextView) findViewById(R.id.author_name);
+        authorEmailView = (TextView) findViewById(R.id.author_email);
+		
+		if(baseData.title != null && !baseData.title.isEmpty() 
+				&& rhymeAuthor != null
+				&& rhymeAuthor.login != null && !rhymeAuthor.login.isEmpty()){
+		
+			titleTextView.setText(baseData.title);
+			
+			String authorLogin = rhymeAuthor.login;
+			authorNameView.setText(authorLogin);
+			if(!rhymeAuthor.email.isEmpty()){
+				StringBuilder builder = new StringBuilder("(")
+					.append(rhymeAuthor.email)
+					.append(")");
+				authorEmailView.setText(builder.toString());
+			}
+		}
+//		else{
+//			DialogBuilder dialogMsg = new DialogBuilder(this);
+//    		dialogMsg.customError(R.string.error_empty_title_and_author);
+//		}
+	}
+	
+	private void showSentences(){
+		if(baseData.sentencesToShow != null)
+		{
+	        fragmentTransaction = fragmentManager.beginTransaction();
+	        
+	        Iterator<SentenceToShow> iter = baseData.sentencesToShow.iterator();
+	        SentenceToShow sen;
+	        for( int i = 0 ; i < baseData.sentencesToShow.size() - 1; i++){
+	        	sen = iter.next();
+	        	fragmentTransaction.add(sentencesContainer, new AuthorRhymeViewFragment(sen.authorTxt));
+	        	fragmentTransaction.add(sentencesContainer, new UserRhymeViewFragment(sen.replyTxt,sen.user));
+	        }
+	        sen = iter.next();
+	        fragmentTransaction.add(sentencesContainer, new AuthorRhymeViewFragment(sen.authorTxt));
+	        
+	        if(sen.replyTxt != null && !sen.replyTxt.isEmpty()){
+	        	fragmentTransaction.add(sentencesContainer, new UserRhymeViewFragment(sen.replyTxt,sen.user));
+	        }
+	        
+	        fragmentTransaction.commit();
+		}
+		
+	}
+	/*
+	private AuthorRhymeViewFragment createAuthorRhymeViewFr(String text){
+		AuthorRhymeViewFragment result = new AuthorRhymeViewFragment();
+    	Bundle args = new Bundle();
+    	args.putString("txt", text + "..." );
+    	result.setArguments(args);
+    	return result;
+	}
+	
+	private UserRhymeViewFragment createUserRhymeViewFr(String text){
+		UserRhymeViewFragment result = new UserRhymeViewFragment();
+    	Bundle args = new Bundle();
+    	args.putString("txt", text + "..." );
+    	result.setArguments(args);
+    	return result;
+	}
+	*/
+	private boolean getSlide(boolean isNext){
+		comingData.putBoolean("isNext", isNext);	
+		comingData.putString("prevValue", baseData.rhymeId);
+		comingData.putString("prevSpecValue", baseData.curValue);
+		if(typeRhyme != null)
+			comingData.putString("typeRhyme", typeRhyme.toString());
+		
+		Intent intent = new Intent(curContext, baseActivityClassForSlide);
+		intent.putExtras(comingData);
+		startActivity(intent);
+		if(isNext){
+			overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+		}
+		else{
+			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+		}
+		finish();
+		return true;
+	}
+
+	
+	
+	
+	private final class GestureListener extends SimpleOnGestureListener {
+
+	    private static final int SWIPE_THRESHOLD = 100;
+	    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+	    @Override
+	    public boolean onDown(MotionEvent e) {
+	        return true;
+	    }
+	    @Override
+	    public boolean onSingleTapConfirmed(MotionEvent e) {
+	        //onTouch(e);
+	        return true;
+	    }
+
+
+	    @Override
+	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	        boolean result = false;
+	        try {
+	            float diffY = e2.getY() - e1.getY();
+	            float diffX = e2.getX() - e1.getX();
+	            if (Math.abs(diffX) > Math.abs(diffY)) {
+	                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+	                    if (diffX > 0) {
+	                    	getSlide(false); //from left to right (prev)
+	                    } else {
+	                    	getSlide(true); //from right to left (next)
+	                    }
+	                }
+	            }
+	            /*else {
+	               // onTouch(e);
+	            }
+	            */
+	        } catch (Exception exception) {
+	            exception.printStackTrace();
+	        }
+	        return result;
+	    }
+	}
+	
+	//think about it maybe it should be external class(?)
+	protected class AddToFavorite extends AsyncTask<Void, Void, Void>  {
+		  
+        protected Void doInBackground(Void... params)  
+        { return null;}
+	}
+}

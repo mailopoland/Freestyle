@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="freestyle/activities/rhymes/AuthorComplActivity.java|freestyle/activities/rhymes/NoAuthorComplActivity.java|freestyle/activities/rhymes/TopNoAuthorComplActivity.java|freestyle/helpers/DownloaderActiv.java|freestyle/data/app/TypeRhymeEnum.java|freestyle/helpers/outin/uploaders/settings/UploadUserEmail.java|freestyle/fragments/clickgenerators/RhymeEnderClickGenerator.java|freestyle/fragments/clickgenerators/AuthorChooseClickGenerator.java|freestyle/fragments/clickgenerators/VoteClickGenerator.java|freestyle/fragments/clickgenerators/AuthorEditClickGenerator.java|freestyle/fragments/clickgenerators/UserEditClickGenerator.java|freestyle/fragments/clickgenerators/abstracts/|freestyle/data/app/LogInUser.java|freestyle/data/app/Pair.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="D:/Dokumenty tymczasowo z c/Dokumenty/Studia/Individual project/Freestyle/Project/appcompat_v7/libs/android-support-v7-appcompat.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

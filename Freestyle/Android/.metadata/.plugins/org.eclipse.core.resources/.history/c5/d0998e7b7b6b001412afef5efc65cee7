@@ -1,0 +1,87 @@
+package freestyle.helpers.executors;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class QueryExecutorPost extends QueryExecutor{
+	//have to have name of method in args[0]
+	//in args[1] should be json object
+	protected String doInBackground(String... args){
+		
+		if(args.length < 1){
+			return null;
+		}
+		String result = null;
+		String url = this.createUrl(args[0]);
+		HttpResponse response = null;
+		HttpClient httpclient =  this.getNewHttpClient();
+		HttpPost post = new HttpPost(url);
+				//new HttpGet("http://10.0.2.2:49841/service1.svc");
+		post.setHeader("Accept", "application/json"); 
+		post.setHeader("Content-type", "application/json"); 
+		if(args.length > 1){
+			StringEntity jsonInSe;
+			try {
+				String jsonString = args[1];
+				JSONObject container = new JSONObject();
+				try {
+					container.put("rhyme", jsonString);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonInSe = new StringEntity(container.toString());
+				post.setEntity(jsonInSe);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try{
+			response = httpclient.execute(post);
+		    StatusLine statusLine = response.getStatusLine();
+		    if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+		    	if(response != null){
+			        ByteArrayOutputStream out = new ByteArrayOutputStream();
+			        response.getEntity().writeTo(out);
+			        out.close();
+			        result = out.toString();
+		    	}
+		    } else{
+		        throw new IOException(statusLine.getReasonPhrase());
+		    }
+		} catch(Exception ex){
+			//todo
+		} finally{
+			if(response != null){
+				try{
+					response.getEntity().getContent().close();
+				} catch(Exception ex){
+					//todo 
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	private String createUrl(String methodName){
+		String result = null;
+		
+		StringBuilder builder = new StringBuilder(connectionUrl);
+		builder.append(methodName);
+		result = builder.toString();
+		
+		return result;
+	}
+}

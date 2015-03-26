@@ -1,0 +1,27 @@
+package freestyle.helpers.outin.downloaders;
+
+import android.content.Context;
+import android.widget.Toast;
+
+//DownloaderStandard plus display message about sorting after correct downloading
+public abstract class DownloaderStandardSortMsg extends DownloaderStandard{
+
+	private int sortMethodId;
+	
+	public DownloaderStandardSortMsg(Context curContext, Class<?> newActivity, int sortMethodId) {
+		super(curContext, newActivity);
+		this.sortMethodId = sortMethodId;
+	}
+
+	@Override  
+    protected void doIfSuccessed()  
+    {  
+		super.doIfSuccessed();
+		
+    }	
+	
+	private void displayToast(){
+		String sortTxt = curContext.getString(resId) + curContext.getString(sortMethodId);
+		Toast.makeText(curContext, sortTxt, Toast.LENGTH_SHORT);
+	}
+}

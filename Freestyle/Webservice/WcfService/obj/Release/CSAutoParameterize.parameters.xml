@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="RhymeWcfContext-Web.config Connection String" description="RhymeWcfContext Connection String used in web.config by the application to access the database." defaultValue="Data Source=mssql5.webio.pl,2401;Initial Catalog=mailo_rhymedb;Persist Security Info=False;Integrated Security=False;User ID=mailo_first_user;Password=S.vesl03" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Dokumenty\ tymczasowo\ z\ c\\Dokumenty\\Studia\\Individual\ project\\Freestyle\\Webservice\\WcfService\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='RhymeWcfContext']/@connectionString" />
+  </parameter>
+  <parameter name="RhymeWcfContextTest-Web.config Connection String" description="RhymeWcfContextTest Connection String used in web.config by the application to access the database." defaultValue="Data Source=(LocalDb)\v11.0;Initial Catalog=RhymeWcfContextTest;Integrated Security=SSPI;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Dokumenty\ tymczasowo\ z\ c\\Dokumenty\\Studia\\Individual\ project\\Freestyle\\Webservice\\WcfService\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='RhymeWcfContextTest']/@connectionString" />
+  </parameter>
+  <parameter name="WcfService.DAL.EntityConnections.ApplicationDbContext-Web.config Connection String" description="WcfService.DAL.EntityConnections.ApplicationDbContext Connection String used in web.config by the application to access the database." defaultValue="WcfService.DAL.EntityConnections.ApplicationDbContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Dokumenty\ tymczasowo\ z\ c\\Dokumenty\\Studia\\Individual\ project\\Freestyle\\Webservice\\WcfService\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='WcfService.DAL.EntityConnections.ApplicationDbContext']/@connectionString" />
+  </parameter>
+</parameters>

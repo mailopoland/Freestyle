@@ -1,0 +1,5 @@
+package freestyle.helpers.outin.downloaders;
+
+public class DownloaderStandardMsg {
+
+}

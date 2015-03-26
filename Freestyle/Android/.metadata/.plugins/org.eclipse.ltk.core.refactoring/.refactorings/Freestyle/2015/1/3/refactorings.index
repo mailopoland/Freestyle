@@ -1,0 +1,73 @@
+1421157224296	Copy compilation unit
+1421157552884	Move compilation units
+1421158032230	Rename type 'IUserEditClickGenerator'
+1421158051450	Delete element
+1421158064096	Rename type 'INewTextEditClickGenerator'
+1421159840213	Rename type 'NewSenClickGenerator'
+1421159883405	Rename type 'StdAuthorRhymeEditClickGenerator'
+1421163631998	Rename method 'getBaseRhyme'
+1421236483464	Rename local variable 'authorEditorFrTag'
+1421236523938	Rename local variable 'authorEditorFrTag'
+1421236629383	Rename local variable 'toEditRhyme'
+1421240955122	Rename type 'RhymeEnderFragment'
+1421240968109	Rename type 'SentenceCommunicateActionFragment'
+1421240984480	Rename type 'SentenceCommunicateViewActionFragment'
+1421241378949	Rename type 'StdRhymeEnderClickGenerator'
+1421241394579	Rename type 'StdAuthorChooseClickGenerator'
+1421241405170	Rename type 'StdAuthorEditClickGenerator'
+1421241413329	Rename type 'StdUserEditClickGenerator'
+1421241511408	Rename method 'removeManyUnnededFragments'
+1421241687432	Delete element
+1421242610386	Rename method 'newRespondAdd'
+1421250798329	Copy compilation unit
+1421251316127	Rename method 'getRhymeAuthorComplFinishDate'
+1421251783010	Rename method 'getRhymeAuthorComplFinishDate'
+1421255332118	Rename resource 'activity_settings'
+1421255392344	Delete element
+1421255406648	Copy file
+1421256824474	Rename resource 'activity_settings.xml'
+1421257261708	Copy file
+1421261676209	Rename resource 'activity_user_settings.xml'
+1421261824826	Move compilation unit
+1421261897300	Move compilation unit
+1421262157814	Move compilation unit
+1421324703485	Delete element
+1421325120562	Move 1 resources to 'xml'
+1421325133334	Rename resource 'fragment_user_settings.xml'
+1421325196867	Rename type 'UserSettingsFragment'
+1421326104542	Move 1 resources to 'menu'
+1421326109254	Delete element
+1421326191112	Rename type 'UserSettingActivity'
+1421326265328	Rename resource 'xml'
+1421326275521	Copy file
+1421326280843	Delete element
+1421326286847	Rename resource 'xml2'
+1421333229616	Move compilation unit
+1421334494660	Rename type 'CustomActionBarActivity'
+1421394951302	Rename type 'MenuActivity'
+1421394981314	Move compilation unit
+1421395178029	Rename type 'ActionBarActivityAdapter'
+1421407615697	Delete element
+1421417242535	Rename local variable 'newLogin'
+1421417254284	Rename field 'newLogin'
+1421417999232	Rename method 'setLogin'
+1421418008616	Rename method 'setLogin'
+1421494283455	Rename package 'freestyle.interfaces'
+1421495257743	Copy file
+1421495628104	Delete elements
+1421495963511	Copy compilation unit
+1421496895152	Copy compilation unit
+1421503372218	Delete element
+1421503780228	Copy folder
+1421504570854	Delete element
+1421506358759	Delete element
+1421506757224	Move compilation unit
+1421506816331	Copy compilation unit
+1421525155340	Delete element
+1421525204371	Copy compilation unit
+1421525219422	Rename type 'WithRespRhymesMenuActivity'
+1421526112921	Copy compilation unit
+1421528556924	Delete element
+1421529310787	Copy compilation unit
+1421583922913	Copy compilation unit
+1421610928951	Copy compilation unit
